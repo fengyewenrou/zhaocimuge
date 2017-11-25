@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhaoci.share.system.dao.SysUsersRolesDao">
+	
+	<!-- 列结果resultMap  2016-01-03 -->
+	<resultMap id="resultMap" type="com.zhaoci.share.user.po.SysUsersRoles">
+        <result column="ID" property="id"/>
+        <result column="USER_ID" property="userId"/>
+        <result column="ROLE_ID" property="roleId"/>
+        <result column="ENABLED" property="enabled"/>
+	</resultMap>
+
+	<!-- 公共列  2016-01-03 -->
+	<sql id="columns">
+		ID, USER_ID, ROLE_ID, ENABLED
+	</sql>
+
+	<!-- 公共条件  2016-01-03 -->
+	<sql id="whereSQL">
+		<if test="id != null and id != '' ">
+		AND ID = #{id}
+		</if>
+		<if test="userId != null and userId != '' ">
+		AND USER_ID = #{userId}
+		</if>
+		<if test="roleId != null and roleId != '' ">
+		AND ROLE_ID = #{roleId}
+		</if>
+		<if test="enabled != null and enabled != '' ">
+		AND ENABLED = #{enabled}
+		</if>
+	</sql>
+
+	<!-- 公共分页条件SQL  2016-01-03 -->
+	<sql id="wherePageSql">
+		<if test="params.id != null and params.id != '' ">
+		AND ID = #{params.id}
+		</if>
+		<if test="params.userId != null and params.userId != '' ">
+		AND USER_ID = #{params.userId}
+		</if>
+		<if test="params.roleId != null and params.roleId != '' ">
+		AND ROLE_ID = #{params.roleId}
+		</if>
+		<if test="params.enabled != null and params.enabled != '' ">
+		AND ENABLED = #{params.enabled}
+		</if>
+	</sql>
+
+	<!-- 根据主键ID查询  2016-01-03 -->
+	<select id="queryById" resultMap="resultMap">
+		SELECT <include refid="columns" />
+		  FROM SYS_USERS_ROLES 
+	     WHERE ID = #{id}     
+	</select>
+
+	<!-- 查询列表  2016-01-03 -->
+	<select id="selectList" resultMap="resultMap">
+		SELECT <include refid="columns" />
+		  FROM SYS_USERS_ROLES
+		 WHERE 1 = 1	
+		 <include refid="whereSQL" />
+	</select>
+
+	<!-- 查询分页列表  2016-01-03 -->
+	<select id="queryListPage" resultMap="resultMap">
+		SELECT <include refid="columns" />
+		  FROM SYS_USERS_ROLES
+		 WHERE 1 = 1
+		 <include refid="wherePageSql" />
+	</select>
+
+	<!-- 插入  2016-01-03 -->
+	<insert id="insert" parameterType="com.zhaoci.share.user.po.SysUsersRoles">
+        INSERT INTO SYS_USERS_ROLES (
+        	ID,
+        	USER_ID,
+        	ROLE_ID,
+        	ENABLED
+        ) VALUES (
+        	#{id},
+        	#{userId},
+        	#{roleId},
+        	#{enabled}
+        )
+	</insert>
+
+	<!-- 根据主键ID删除  2016-01-03 -->
+	<delete id="delete">
+		DELETE FROM SYS_USERS_ROLES 
+		 WHERE ID = #{id} 
+	</delete>
+	<delete id="del">
+		DELETE FROM SYS_USERS_ROLES
+		WHERE ROLE_ID = #{roleId}
+	</delete>
+	<delete id="del2">
+		DELETE FROM SYS_USERS_ROLES
+		WHERE user_id = #{userId}
+	</delete>
+	<!-- 更新  2016-01-03 -->
+	<update id="update" parameterType="com.zhaoci.share.user.po.SysUsersRoles">
+        UPDATE SYS_USERS_ROLES 
+		SET
+	        USER_ID = #{userId},
+	        ROLE_ID = #{roleId},
+	        ENABLED = #{enabled}
+        WHERE ID = #{id} 	        
+	</update>
+
+	<update id="batchUpdate">
+		<foreach collection="list" item="item" open="" close="" separator=";">
+			UPDATE SYS_USERS_ROLES
+			<set>
+    	        USER_ID = #{item.userId},
+    	        ROLE_ID = #{item.roleId},
+    	        ENABLED = #{item.enabled}
+			</set>
+            WHERE ID = #{item.id} 	
+		</foreach>
+	</update>
+</mapper>

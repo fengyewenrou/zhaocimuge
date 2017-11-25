@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans   
+    http://www.springframework.org/schema/beans/spring-beans-3.1.xsd   
+    http://www.springframework.org/schema/tx   
+    http://www.springframework.org/schema/tx/spring-tx-3.1.xsd  
+    http://www.springframework.org/schema/context  
+    http://www.springframework.org/schema/context/spring-context-3.1.xsd  
+    http://www.springframework.org/schema/mvc  
+    http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd">
+    
+	<mvc:annotation-driven/>
+	<!-- 扫描所有的controller 但是不扫描service-->    
+	<context:component-scan base-package="com.zhaoci.share">
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service" />
+	</context:component-scan>
+
+	<!-- JSP视图解析 -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
+		<property name="contentType" value="text/html;charset=UTF8" />
+		<property name="prefix" value="/WEB-INF/pages/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+	<!-- JSON视图解析 -->
+	<bean name="jsonView" class="org.springframework.web.servlet.view.json.MappingJackson2JsonView">
+		<property name="objectMapper" ref="globalObjectMapper" />
+	</bean>
+	
+	<!-- 上传拦截，如最大上传值及最小上传值 -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize">
+			<value>104857600</value>
+		</property>
+		<property name="maxInMemorySize">
+			<value>4096</value>
+		</property>
+		<property name="defaultEncoding">
+			<value>utf-8</value>
+		</property>
+	</bean>
+    <!-- SpringMVC在超出上传文件限制时,会抛出org.springframework.web.multipart.MaxUploadSizeExceededException -->
+    <!-- 该异常是SpringMVC在检查上传的文件信息时抛出来的,而且此时还没有进入到Controller方法中 -->
+    <bean id="exceptionResolver" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+        <property name="exceptionMappings">
+            <props>
+                <!-- 遇到MaxUploadSizeExceededException异常时,自动跳转到/WEB-INF/pages/error_fileupload.jsp页面 -->
+                <prop key="org.springframework.web.multipart.MaxUploadSizeExceededException">error_fileupload</prop>
+            </props>
+        </property>
+    </bean>
+    <!-- 由于web.xml中设置SpringMVC拦截所有请求,所以在读取静态资源文件时就会读不到 -->
+    <!-- 通过此配置即可指定所有请求或引用"/js/**"的资源,都会从"/js/"中查找 -->    	
+     <mvc:resources mapping="js/**" location="js/" />
+    <mvc:resources mapping="img/**" location="img/" />
+    <mvc:resources mapping="upload/**" location="upload/" />
+    <mvc:resources mapping="css/**" location="css/" />
+    <mvc:resources mapping="fonts/**" location="fonts/" />
+	<mvc:resources mapping="font-awesome/**" location="fonts/" />
+
+	<!-- 首页配置 -->
+	<mvc:view-controller path="/" view-name="forward:/login.jsp"/>
+	                                   
+	 <bean id="shareInterceptor" class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping">
+		<property name="interceptors">
+			<list>
+				<bean class="com.zhaoci.framework.base.controller.AppGatewayInterceptor"/>
+			</list>			
+		</property>
+	</bean>
+
+	 <mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/app/**"/>
+			<mvc:mapping path="/other/**"/>
+			<bean class="com.zhaoci.framework.base.controller.AppGatewayInterceptor"/>
+		</mvc:interceptor>
+	</mvc:interceptors>
+	 <!--<mvc:interceptors>-->
+    	<!--<bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor" />-->
+    	<!--<bean class="com.zhaoci.framework.base.controller.AppGatewayInterceptor"/>-->
+	<!--</mvc:interceptors>-->
+</beans>

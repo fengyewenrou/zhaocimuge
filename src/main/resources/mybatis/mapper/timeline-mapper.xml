@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhaoci.share.timeline.dao.TimelineDao">
+	
+	<!-- 列结果resultMap boxiang 2016-01-03 -->
+	<resultMap id="resultMap" type="com.zhaoci.share.timeline.po.Timeline">
+        <result column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="content" property="content"/>
+        <result column="create_time" property="createTime"/>
+        <result column="icon" property="icon"/>
+	</resultMap>
+
+	<!-- 公共列 boxiang 2016-01-03 -->
+	<sql id="columns">
+		id, title, content, create_time, icon
+	</sql>
+
+	<!-- 公共条件 boxiang 2016-01-03 -->
+	<sql id="whereSQL">
+		<if test="id != null and id != '' ">
+		AND id = #{id}
+		</if>
+		<if test="title != null and title != '' ">
+		AND title = #{title}
+		</if>
+		<if test="content != null and content != '' ">
+		AND content = #{content}
+		</if>
+		<if test="createTime != null and createTime != '' ">
+		AND create_time = #{createTime}
+		</if>
+		<if test="icon != null and icon != '' ">
+		AND icon = #{icon}
+		</if>
+	</sql>
+
+	<!-- 公共分页条件SQL boxiang 2016-01-03 -->
+	<sql id="wherePageSql">
+		<if test="params.id != null and params.id != '' ">
+		AND id = #{params.id}
+		</if>
+		<if test="params.title != null and params.title != '' ">
+		AND title = #{params.title}
+		</if>
+		<if test="params.content != null and params.content != '' ">
+		AND content = #{params.content}
+		</if>
+		<if test="params.createTime != null and params.createTime != '' ">
+		AND create_time = #{params.createTime}
+		</if>
+		<if test="params.icon != null and params.icon != '' ">
+		AND icon = #{params.icon}
+		</if>
+	</sql>
+
+	<!-- 根据主键ID查询 boxiang 2016-01-03 -->
+	<select id="queryById" resultMap="resultMap">
+		SELECT <include refid="columns" />
+		  FROM T_TIMELINE 
+	     WHERE id = #{id}     
+	</select>
+
+	<!-- 查询列表 boxiang 2016-01-03 -->
+	<select id="selectList" resultMap="resultMap">
+		SELECT <include refid="columns" />
+		  FROM T_TIMELINE
+		 WHERE 1 = 1	
+		 <include refid="whereSQL" />
+		order by create_time DESC
+		limit 6
+	</select>
+
+	<!-- 查询分页列表 boxiang 2016-01-03 -->
+	<select id="queryListPage" resultMap="resultMap">
+		SELECT <include refid="columns" />
+		  FROM T_TIMELINE
+		 WHERE 1 = 1
+		 <include refid="wherePageSql" />
+	</select>
+
+	<!-- 插入 boxiang 2016-01-03 -->
+	<insert id="insert" parameterType="com.zhaoci.share.timeline.po.Timeline">
+        INSERT INTO T_TIMELINE (
+        	id,
+        	title,
+        	content,
+        	create_time,
+        	icon
+        ) VALUES (
+        	#{id},
+        	#{title},
+        	#{content},
+        	#{createTime},
+        	#{icon}
+        )
+	</insert>
+
+	<!-- 根据主键ID删除 boxiang 2016-01-03 -->
+	<delete id="delete">
+		DELETE FROM T_TIMELINE 
+		 WHERE id = #{id} 
+	</delete>
+
+	<!-- 更新 boxiang 2016-01-03 -->
+	<update id="update" parameterType="com.zhaoci.share.timeline.po.Timeline">
+        UPDATE T_TIMELINE 
+		SET
+	        title = #{title},
+	        content = #{content},
+	        create_time = #{createTime},
+	        icon = #{icon}
+        WHERE id = #{id} 	        
+	</update>
+
+	<update id="batchUpdate">
+		<foreach collection="list" item="item" open="" close="" separator=";">
+			UPDATE T_TIMELINE
+			<set>
+    	        title = #{item.title},
+    	        content = #{item.content},
+    	        create_time = #{item.createTime},
+    	        icon = #{item.icon}
+			</set>
+            WHERE id = #{item.id} 	
+		</foreach>
+	</update>
+</mapper>

@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhaoci.share.user.dao.MenuDao">
+	
+	<!-- 列结果resultMap jun.pan 2016-01-03 -->
+	<resultMap id="resultMap" type="com.zhaoci.share.user.po.Menu">
+        <result column="id" property="id"/>
+        <result column="menu_code" property="menuCode"/>
+        <result column="menu_name" property="menuName"/>
+        <result column="icon" property="icon"/>
+        <result column="levels" property="levels"/>
+        <result column="urls" property="urls"/>
+        <result column="sort" property="sort"/>
+        <result column="memo" property="memo"/>
+        <result column="parent_code" property="parentCode"/>
+        <result column="is_leaf" property="isLeaf"/>
+        <result column="is_used" property="isUsed"/>
+	</resultMap>
+
+	<!-- 公共列 jun.pan 2016-01-03 -->
+	<sql id="columns">
+		id, menu_code, menu_name, icon, levels, urls, sort, memo, parent_code, is_leaf, is_used
+	</sql>
+
+	<!-- 公共条件 jun.pan 2016-01-03 -->
+	<sql id="whereSQL">
+		<if test="id != null and id != '' ">
+		AND id = #{id}
+		</if>
+		<if test="menuCode != null and menuCode != '' ">
+		AND menu_code = #{menuCode}
+		</if>
+		<if test="menuName != null and menuName != '' ">
+		AND menu_name = #{menuName}
+		</if>
+		<if test="icon != null and icon != '' ">
+		AND icon = #{icon}
+		</if>
+		<if test="levels != null and levels != '' ">
+		AND levels = #{levels}
+		</if>
+		<if test="urls != null and urls != '' ">
+		AND urls = #{urls}
+		</if>
+		<if test="sort != null and sort != '' ">
+		AND sort = #{sort}
+		</if>
+		<if test="memo != null and memo != '' ">
+		AND memo = #{memo}
+		</if>
+		<if test="parentCode != null and parentCode != '' ">
+		AND parent_code = #{parentCode}
+		</if>
+		<if test="isLeaf != null and isLeaf != '' ">
+		AND is_leaf = #{isLeaf}
+		</if>
+		<if test="isUsed != null and isUsed != '' ">
+		AND is_used = #{isUsed}
+		</if>
+	</sql>
+
+	<!-- 公共分页条件SQL jun.pan 2016-01-03 -->
+	<sql id="wherePageSql">
+		<if test="params.id != null and params.id != '' ">
+		AND id = #{params.id}
+		</if>
+		<if test="params.menuCode != null and params.menuCode != '' ">
+		AND menu_code = #{params.menuCode}
+		</if>
+		<if test="params.menuName != null and params.menuName != '' ">
+		AND menu_name = #{params.menuName}
+		</if>
+		<if test="params.icon != null and params.icon != '' ">
+		AND icon = #{params.icon}
+		</if>
+		<if test="params.levels != null and params.levels != '' ">
+		AND levels = #{params.levels}
+		</if>
+		<if test="params.urls != null and params.urls != '' ">
+		AND urls = #{params.urls}
+		</if>
+		<if test="params.sort != null and params.sort != '' ">
+		AND sort = #{params.sort}
+		</if>
+		<if test="params.memo != null and params.memo != '' ">
+		AND memo = #{params.memo}
+		</if>
+		<if test="params.parentCode != null and params.parentCode != '' ">
+		AND parent_code = #{params.parentCode}
+		</if>
+		<if test="params.isLeaf != null and params.isLeaf != '' ">
+		AND is_leaf = #{params.isLeaf}
+		</if>
+		<if test="params.isUsed != null and params.isUsed != '' ">
+		AND is_used = #{params.isUsed}
+		</if>
+	</sql>
+	
+	<select id="queryByPower" resultMap="resultMap">
+		select DISTINCT(t1.menu_code), t1.id, t1.menu_name, t1.icon, t1.levels, t1.urls, t1.sort, t1.memo, t1.parent_code, t1.is_leaf, t1.is_used
+		  from t_menu t1 left join t_menu_role t2 on t1.menu_code=t2.menu_code
+		where t1.parent_code=#{parentCode} and t2.role_power in ${rolePower} and t1.is_used='1' and t2.is_used='1' GROUP BY id order by CONVERT(sort,SIGNED) asc
+	</select>
+
+	<!-- 根据主键ID查询 jun.pan 2016-01-03 -->
+	<select id="queryById" resultMap="resultMap">
+		SELECT <include refid="columns" />
+		  FROM T_MENU 
+	     WHERE id = #{id}     
+	</select>
+
+	<!-- 查询列表 jun.pan 2016-01-03 -->
+	<select id="selectList" resultMap="resultMap">
+		SELECT <include refid="columns" />
+		  FROM T_MENU
+		 WHERE 1 = 1	
+		 <include refid="whereSQL" />
+	</select>
+
+	<select id="queryBySort" resultType="java.lang.Integer">
+	SELECT MAX(sort) from t_menu where parent_code = '10' and is_used = '1'
+	</select>
+	<select id="querySunBySort" resultType="java.lang.Integer">
+		SELECT MAX(sort) from t_menu where parent_code =#{_parameter} and is_used = '1'
+	</select>
+	<!-- 查询分页列表 jun.pan 2016-01-03 -->
+	<select id="queryListPage" resultMap="resultMap">
+		SELECT <include refid="columns" />
+		  FROM T_MENU
+		 WHERE 1 = 1
+		 <include refid="wherePageSql" />
+	</select>
+
+	<!-- 插入 jun.pan 2016-01-03 -->
+	<insert id="insert" parameterType="com.zhaoci.share.user.po.Menu">
+        INSERT INTO T_MENU (
+        	id,
+        	menu_code,
+        	menu_name,
+        	icon,
+        	levels,
+        	urls,
+        	sort,
+        	memo,
+        	parent_code,
+        	is_leaf,
+        	is_used
+        ) VALUES (
+        	#{id},
+        	#{menuCode},
+        	#{menuName},
+        	#{icon},
+        	#{levels},
+        	#{urls},
+        	#{sort},
+        	#{memo},
+        	#{parentCode},
+        	#{isLeaf},
+        	#{isUsed}
+        )
+	</insert>
+
+	<!-- 根据主键ID删除 jun.pan 2016-01-03 -->
+	<delete id="delete">
+		DELETE FROM T_MENU 
+		 WHERE id = #{id} 
+	</delete>
+
+	<!-- 更新 jun.pan 2016-01-03 -->
+	<update id="update" parameterType="com.zhaoci.share.user.po.Menu">
+        UPDATE T_MENU 
+		SET
+	        menu_code = #{menuCode},
+	        menu_name = #{menuName},
+	        icon = #{icon},
+	        levels = #{levels},
+	        urls = #{urls},
+	        sort = #{sort},
+	        memo = #{memo},
+	        parent_code = #{parentCode},
+	        is_leaf = #{isLeaf},
+	        is_used = #{isUsed}
+        WHERE id = #{id} 	        
+	</update>
+
+	<update id="batchUpdate">
+		<foreach collection="list" item="item" open="" close="" separator=";">
+			UPDATE T_MENU
+			<set>
+    	        menu_code = #{item.menuCode},
+    	        menu_name = #{item.menuName},
+    	        icon = #{item.icon},
+    	        levels = #{item.levels},
+    	        urls = #{item.urls},
+    	        sort = #{item.sort},
+    	        memo = #{item.memo},
+    	        parent_code = #{item.parentCode},
+    	        is_leaf = #{item.isLeaf},
+    	        is_used = #{item.isUsed}
+			</set>
+            WHERE id = #{item.id} 	
+		</foreach>
+	</update>
+</mapper>

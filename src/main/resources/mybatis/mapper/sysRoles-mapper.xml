@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhaoci.share.user.dao.SysRolesDao">
+	
+	<!-- 列结果resultMap  2016-01-03 -->
+	<resultMap id="resultMap" type="com.zhaoci.share.user.po.SysRoles">
+        <result column="ROLE_ID" property="roleId"/>
+        <result column="ROLE_NAME" property="roleName"/>
+        <result column="ROLE_DESC" property="roleDesc"/>
+        <result column="ENABLED" property="enabled"/>
+        <result column="ISSYS" property="issys"/>
+        <result column="MODULE" property="module"/>
+		<result column="authority_id" property="authorityId"/>
+		<result column="authority_name" property="authorityName"/>
+	</resultMap>
+
+	<!-- 公共列  2016-01-03 -->
+	<sql id="columns">
+		ROLE_ID, ROLE_NAME, ROLE_DESC, ENABLED, ISSYS, MODULE
+	</sql>
+
+	<!-- 公共条件  2016-01-03 -->
+	<sql id="whereSQL">
+		<if test="roleId != null and roleId != '' ">
+		AND ROLE_ID = #{roleId}
+		</if>
+		<if test="roleName != null and roleName != '' ">
+		AND ROLE_NAME = #{roleName}
+		</if>
+		<if test="roleDesc != null and roleDesc != '' ">
+		AND ROLE_DESC = #{roleDesc}
+		</if>
+		<if test="enabled != null and enabled != '' ">
+		AND ENABLED = #{enabled}
+		</if>
+		<if test="issys != null and issys != '' ">
+		AND ISSYS = #{issys}
+		</if>
+		<if test="module != null and module != '' ">
+		AND MODULE = #{module}
+		</if>
+	</sql>
+
+	<!-- 公共分页条件SQL  2016-01-03 -->
+	<sql id="wherePageSql">
+		<if test="params.roleId != null and params.roleId != '' ">
+		AND ROLE_ID = #{params.roleId}
+		</if>
+		<if test="params.roleName != null and params.roleName != '' ">
+		AND ROLE_NAME = #{params.roleName}
+		</if>
+		<if test="params.roleDesc != null and params.roleDesc != '' ">
+		AND ROLE_DESC = #{params.roleDesc}
+		</if>
+		<if test="params.enabled != null and params.enabled != '' ">
+		AND ENABLED = #{params.enabled}
+		</if>
+		<if test="params.issys != null and params.issys != '' ">
+		AND ISSYS = #{params.issys}
+		</if>
+		<if test="params.module != null and params.module != '' ">
+		AND MODULE = #{params.module}
+		</if>
+	</sql>
+
+	<!-- 根据主键ID查询  2016-01-03 -->
+	<select id="queryById" resultMap="resultMap">
+		SELECT <include refid="columns" />
+		  FROM SYS_ROLES 
+	     WHERE ROLE_ID = #{roleId}     
+	</select>
+
+	<!-- 查询列表  2016-01-03 -->
+	<select id="selectList" resultMap="resultMap">
+		SELECT <include refid="columns" />
+		  FROM SYS_ROLES
+		 WHERE 1 = 1	
+		 <include refid="whereSQL" />
+	</select>
+	<select id="selectListRoles" resultMap="resultMap">
+		SELECT
+		*
+		FROM
+		sys_roles a
+		LEFT JOIN sys_users_roles b ON a.ROLE_ID = b.ROLE_ID
+		WHERE
+		b.USER_ID = #{userId}
+	</select>
+	<!-- 查询分页列表  2016-01-03 -->
+	<select id="queryListPage" resultMap="resultMap">
+		SELECT <include refid="columns" />
+		  FROM SYS_ROLES
+		 WHERE 1 = 1
+		 <include refid="wherePageSql" />
+	</select>
+
+	<!-- 插入  2016-01-03 -->
+	<insert id="insert" parameterType="com.zhaoci.share.user.po.SysRoles">
+        INSERT INTO SYS_ROLES (
+        	ROLE_ID,
+        	ROLE_NAME,
+        	ROLE_DESC,
+        	ENABLED,
+        	ISSYS,
+        	MODULE
+        ) VALUES (
+        	#{roleId},
+        	#{roleName},
+        	#{roleDesc},
+        	#{enabled},
+        	#{issys},
+        	#{module}
+        )
+	</insert>
+
+	<!-- 根据主键ID删除  2016-01-03 -->
+	<delete id="delete">
+		DELETE FROM SYS_ROLES 
+		 WHERE ROLE_ID = #{roleId} 
+	</delete>
+
+	<!-- 更新  2016-01-03 -->
+	<update id="update" parameterType="com.zhaoci.share.user.po.SysRoles">
+        UPDATE SYS_ROLES 
+		SET
+	        ROLE_NAME = #{roleName},
+	        ROLE_DESC = #{roleDesc},
+	        ENABLED = #{enabled},
+	        ISSYS = #{issys},
+	        MODULE = #{module}
+        WHERE ROLE_ID = #{roleId}
+	</update>
+
+	<update id="batchUpdate">
+		<foreach collection="list" item="item" open="" close="" separator=";">
+			UPDATE SYS_ROLES
+			<set>
+    	        ROLE_NAME = #{item.roleName},
+    	        ROLE_DESC = #{item.roleDesc},
+    	        ENABLED = #{item.enabled},
+    	        ISSYS = #{item.issys},
+    	        MODULE = #{item.module}
+			</set>
+            WHERE ROLE_ID = #{item.roleId} 	
+		</foreach>
+	</update>
+	<!-- 查询关联 -->
+	<select id="queryList"  resultMap="resultMap">
+		SELECT
+				sys_authorities.*,temp.*
+		FROM
+		sys_users
+		LEFT JOIN sys_users_roles ON sys_users.USER_ID = sys_users_roles.USER_ID
+		LEFT JOIN sys_roles_authorities on sys_roles_authorities.ROLE_ID = sys_users_roles.ROLE_ID
+		LEFT JOIN sys_authorities ON SYS_ROLES_AUTHORITIES.AUTHORITY_ID = sys_authorities.AUTHORITY_ID
+		LEFT JOIN (
+		SELECT
+		b.*,c.AUTHORITY_ID
+		FROM
+		sys_roles b
+		LEFT JOIN sys_roles_authorities c ON b.ROLE_ID=c.ROLE_ID
+		where c.ROLE_ID=#{roleId}
+		) temp on temp.AUTHORITY_ID=sys_authorities.AUTHORITY_ID WHERE   sys_users.USER_ID = #{userId}
+		 GROUP BY sys_authorities.AUTHORITY_ID ORDER BY sys_authorities.AUTHORITY_DESC
+	</select>
+	<select id="queryListRoles"   resultMap="resultMap" >
+					SELECT
+				*
+			FROM
+				sys_roles a
+			LEFT JOIN (
+				SELECT
+					b.*, c.ROLE_ID
+				FROM
+					sys_users b
+				LEFT JOIN sys_users_roles c ON b.USER_ID=c.USER_ID
+				WHERE
+					b.ENABLED='1' and c.ENABLED='1' and c.USER_ID=#{userId}
+			) temp ON  a.ROLE_ID=temp.role_id
+			WHERE
+				a.ENABLED = '1'
+		<if test="module != null and module != '' ">
+			AND a.MODULE = #{module}
+		</if>
+				GROUP BY a.ROLE_ID
+
+
+	</select>
+	<select id="queryListRoles2"  resultMap="resultMap" >
+						SELECT
+				*
+			FROM
+				sys_roles a
+			LEFT JOIN (
+				SELECT
+					b.*, c.ROLE_ID
+				FROM
+					sys_authorities b
+				LEFT JOIN sys_roles_authorities c ON b.AUTHORITY_ID=c.AUTHORITY_ID
+				WHERE
+					b.ENABLED='1' and c.ENABLED='1' and c.AUTHORITY_ID = #{authorityId}
+			) temp ON  a.ROLE_ID=temp.role_id
+			WHERE
+				a.ENABLED = '1'
+		<if test="module != null and module != '' ">
+			AND a.MODULE = #{module}
+		</if>
+				 GROUP BY a.ROLE_ID
+
+	</select>
+
+</mapper>

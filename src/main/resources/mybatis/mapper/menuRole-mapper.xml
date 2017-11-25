@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhaoci.share.user.dao.MenuRoleDao">
+	
+	<!-- 列结果resultMap jun.pan 2016-01-03 -->
+	<resultMap id="resultMap" type="com.zhaoci.share.user.po.MenuRole">
+        <result column="id" property="id"/>
+        <result column="menu_code" property="menuCode"/>
+        <result column="role_power" property="rolePower"/>
+        <result column="memo" property="memo"/>
+        <result column="is_used" property="isUsed"/>
+		<result column="user_id" property="userId"/>
+	</resultMap>
+
+	<resultMap id="menuJoinMenuRole" type="com.zhaoci.share.user.po.Menu">
+		<result column="id" property="id"/>
+		<result column="menu_code" property="menuCode"/>
+		<result column="menu_name" property="menuName"/>
+		<result column="icon" property="icon"/>
+		<result column="levels" property="levels"/>
+		<result column="urls" property="urls"/>
+		<result column="sort" property="sort"/>
+		<result column="memo" property="memo"/>
+		<result column="parent_code" property="parentCode"/>
+		<result column="is_leaf" property="isLeaf"/>
+		<result column="is_used" property="isUsed"/>
+		<collection property="menuRole" ofType="com.zhaoci.share.user.po.MenuRole">
+			<result column="mr_id" property="id"/>
+			<result column="mr_menu_code" property="menuCode"/>
+			<result column="mr_role_name" property="roleName"/>
+			<result column="mr_role_power" property="rolePower"/>
+			<result column="mr_memo" property="memo"/>
+			<result column="mr_is_used" property="isUsed"/>
+		</collection>
+	</resultMap>
+
+	<!-- 公共列 jun.pan 2016-01-03 -->
+	<sql id="columns">
+		id, menu_code, role_name, role_power, memo, is_used
+	</sql>
+
+	<!-- 公共条件 jun.pan 2016-01-03 -->
+	<sql id="whereSQL">
+		<if test="id != null and id != '' ">
+		AND id = #{id}
+		</if>
+		<if test="menuCode != null and menuCode != '' ">
+		AND menu_code = #{menuCode}
+		</if>
+		<if test="roleName != null and roleName != '' ">
+			AND role_name = #{roleName}
+		</if>
+		<if test="rolePower != null and rolePower != '' ">
+		AND role_power = #{rolePower}
+		</if>
+		<if test="memo != null and memo != '' ">
+		AND memo = #{memo}
+		</if>
+		<if test="isUsed != null and isUsed != '' ">
+		AND is_used = #{isUsed}
+		</if>
+	</sql>
+
+	<!-- 公共分页条件SQL jun.pan 2016-01-03 -->
+	<sql id="wherePageSql">
+		<if test="params.id != null and params.id != '' ">
+		AND id = #{params.id}
+		</if>
+		<if test="params.menuCode != null and params.menuCode != '' ">
+		AND menu_code = #{params.menuCode}
+		</if>
+		<if test="params.rolePower != null and params.rolePower != '' ">
+		AND role_power = #{params.rolePower}
+		</if>
+		<if test="params.memo != null and params.memo != '' ">
+		AND memo = #{params.memo}
+		</if>
+		<if test="params.isUsed != null and params.isUsed != '' ">
+		AND is_used = #{params.isUsed}
+		</if>
+	</sql>
+
+	<!-- 根据主键ID查询 jun.pan 2016-01-03 -->
+	<select id="queryById" resultMap="resultMap">
+		SELECT <include refid="columns" />
+		  FROM T_MENU_ROLE 
+	     WHERE id = #{id}     
+	</select>
+
+	<!-- 查询列表 jun.pan 2016-01-03 -->
+	<select id="selectList" resultMap="resultMap">
+		SELECT <include refid="columns" />
+		  FROM T_MENU_ROLE
+		 WHERE 1 = 1	
+		 <include refid="whereSQL" />
+	</select>
+
+	<!-- 查询分页列表 jun.pan 2016-01-03 -->
+	<select id="queryListPage" resultMap="resultMap">
+		SELECT <include refid="columns" />
+		  FROM T_MENU_ROLE
+		 WHERE 1 = 1
+		 <include refid="wherePageSql" />
+	</select>
+
+	<!-- 插入 jun.pan 2016-01-03 -->
+	<insert id="insert" parameterType="com.zhaoci.share.user.po.MenuRole">
+        INSERT INTO T_MENU_ROLE (
+        	id,
+        	menu_code,
+        	role_name,
+        	role_power,
+        	memo,
+        	is_used
+        ) VALUES (
+        	#{id},
+        	#{menuCode},
+        	#{roleName},
+        	#{rolePower},
+        	#{memo},
+        	#{isUsed}
+        )
+	</insert>
+
+	<!-- 根据主键ID删除 jun.pan 2016-01-03 -->
+	<delete id="delete">
+		DELETE FROM T_MENU_ROLE 
+		 WHERE id = #{id} 
+	</delete>
+
+	<!-- 更新 jun.pan 2016-01-03 -->
+	<update id="update" parameterType="com.zhaoci.share.user.po.MenuRole">
+        UPDATE T_MENU_ROLE 
+		SET
+	        menu_code = #{menuCode},
+	        role_power = #{rolePower},
+	        role_name = #{roleName},
+	        memo = #{memo},
+	        is_used = #{isUsed}
+        WHERE id = #{id} 	        
+	</update>
+
+	<update id="batchUpdate">
+		<foreach collection="list" item="item" open="" close="" separator=";">
+			UPDATE T_MENU_ROLE
+			<set>
+    	        menu_code = #{item.menuCode},
+    	        role_power = #{item.rolePower},
+				role_name = #{roleName},
+    	        memo = #{item.memo},
+    	        is_used = #{item.isUsed}
+			</set>
+            WHERE id = #{item.id} 	
+		</foreach>
+	</update>
+
+	<!-- 查询菜单列表，填充用户权限 -->
+	<select id="menuJoinMenuRole" resultMap="menuJoinMenuRole">
+		SELECT
+		m.*,
+		mr.id mr_id,
+		mr.menu_code mr_menu_code,
+		mr.role_name mr_role_name,
+		mr.role_power mr_role_power,
+		mr.memo mr_memo,
+		mr.is_used mr_is_used
+		FROM `t_menu` m
+		left join (
+			select * from t_menu_role
+			WHERE 1 = 1
+			<include refid="whereSQL" />
+		    GROUP by id
+		) mr on mr.menu_code = m.menu_code where m.is_used ='1'
+	</select>
+
+	<select id="menuJoinMenuRole2" resultMap="menuJoinMenuRole">
+		SELECT
+		m.*,
+		mr.id mr_id,
+		mr.menu_code mr_menu_code,
+		mr.role_name mr_role_name,
+		mr.role_power mr_role_power,
+		mr.memo mr_memo,
+		mr.is_used mr_is_used
+		FROM `t_menu` m
+		left join (
+			select * from t_menu_role
+			WHERE 1 = 1
+			<if test="roleName != null and roleName != '' ">
+				AND role_name = #{roleName}
+			</if>
+		) mr on mr.menu_code = m.menu_code
+		join t_menu_role mr2 on mr2.menu_code = m.menu_code
+		where 0 = 0
+		<if test="rolePower != null and rolePower != '' ">
+			AND mr2.role_power = #{rolePower}
+		</if>
+		<if test="isUsed != null and isUsed != '' ">
+			AND mr2.is_used = #{isUsed}
+		</if>
+		GROUP by id
+	</select>
+	<select id="menuJoinMenuRole3" resultMap="menuJoinMenuRole">
+					SELECT
+						d.*,
+						i.id mr_id,
+						i.menu_code mr_menu_code,
+						i.role_name mr_role_name,
+						i.role_power mr_role_power,
+						i.memo mr_memo,
+		                i.is_used mr_is_used
+				FROM
+					t_menu d
+				LEFT JOIN t_menu_role c ON c.menu_code = d.menu_code
+				LEFT JOIN sys_roles b ON b.ROLE_NAME = c.role_power
+				LEFT JOIN sys_users_roles a ON a.ROLE_ID = b.ROLE_ID
+				LEFT JOIN (
+					SELECT
+					  f.*
+					FROM
+						t_menu e
+					LEFT JOIN t_menu_role f ON e.menu_code = f.menu_code
+					WHERE
+						f.role_power = #{roleName}
+				) i ON i.menu_code = d.menu_code
+				WHERE
+					1=1
+		<if test="isUsed != null and isUsed != '' ">
+			AND i.is_used = #{isUsed}
+		</if>
+				AND d.is_used = '1'
+				GROUP BY
+					d.id;
+	</select>
+	<select id="menuJoinMenuRole4" resultMap="menuJoinMenuRole">
+		SELECT
+		d.*,
+		i.id mr_id,
+		i.menu_code mr_menu_code,
+		i.role_name mr_role_name,
+		i.role_power mr_role_power,
+		i.memo mr_memo,
+		i.is_used mr_is_used
+		FROM
+		t_menu d
+		LEFT JOIN t_menu_role c ON c.menu_code = d.menu_code
+		LEFT JOIN sys_roles b ON b.ROLE_NAME = c.role_power
+		LEFT JOIN sys_users_roles a ON a.ROLE_ID = b.ROLE_ID
+		LEFT JOIN (
+		SELECT
+		f.*
+		FROM
+		t_menu e
+		LEFT JOIN t_menu_role f ON e.menu_code = f.menu_code
+		WHERE
+		f.role_power = #{roleName}
+		) i ON i.menu_code = d.menu_code
+		WHERE
+		a.USER_ID =#{userId}
+		<if test="isUsed != null and isUsed != '' ">
+			AND i.is_used = #{isUsed}
+		</if>
+		AND d.is_used = '1'
+		AND c.is_used = '1'
+		AND b.ENABLED = '1'
+		AND a.ENABLED = '1'
+		GROUP BY
+		d.id;
+	</select>
+</mapper>

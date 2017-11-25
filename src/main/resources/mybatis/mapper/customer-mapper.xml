@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhaoci.share.customer.dao.CustomerDao">
+	
+	<!-- 列结果resultMap  2016-01-03 -->
+	<resultMap id="resultMap" type="com.zhaoci.share.customer.po.Customer">
+        <result column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="phone" property="phone"/>
+        <result column="adress" property="adress"/>
+        <result column="email" property="email"/>
+	</resultMap>
+
+	<!-- 公共列  2016-01-03 -->
+	<sql id="columns">
+		id, name, phone, adress, email,sex,age
+	</sql>
+
+	<!-- 公共条件  2016-01-03 -->
+	<sql id="whereSQL">
+		<if test="id != null and id != '' ">
+		AND id = #{id}
+		</if>
+		<if test="name != null and name != '' ">
+		AND name = #{name}
+		</if>
+		<if test="phone != null and phone != '' ">
+		AND phone = #{phone}
+		</if>
+		<if test="adress != null and adress != '' ">
+		AND adress = #{adress}
+		</if>
+		<if test="email != null and email != '' ">
+		AND email = #{email}
+		</if>
+	</sql>
+
+	<!-- 公共分页条件SQL  2016-01-03 -->
+	<sql id="wherePageSql">
+		<if test="params.id != null and params.id != '' ">
+		AND id = #{params.id}
+		</if>
+		<if test="params.name != null and params.name != '' ">
+		AND name = #{params.name}
+		</if>
+		<if test="params.phone != null and params.phone != '' ">
+		AND phone = #{params.phone}
+		</if>
+		<if test="params.adress != null and params.adress != '' ">
+		AND adress = #{params.adress}
+		</if>
+		<if test="params.email != null and params.email != '' ">
+		AND email = #{params.email}
+		</if>
+	</sql>
+
+	<!-- 根据主键ID查询  2016-01-03 -->
+	<select id="queryById" resultMap="resultMap">
+		SELECT <include refid="columns" />
+		  FROM CUSTOMER 
+	     WHERE id = #{id}     
+	</select>
+
+	<!-- 查询列表  2016-01-03 -->
+	<select id="selectList" resultMap="resultMap">
+		SELECT <include refid="columns" />
+		  FROM CUSTOMER
+		 WHERE 1 = 1	
+		 <include refid="whereSQL" />
+	</select>
+
+	<!-- 查询分页列表  2016-01-03 -->
+	<select id="queryListPage" resultMap="resultMap">
+		SELECT <include refid="columns" />
+		  FROM CUSTOMER
+		 WHERE 1 = 1
+		 <include refid="wherePageSql" />
+	</select>
+	<select id="queryListByExcel" resultMap="resultMap">
+		SELECT <include refid="columns" />
+		FROM CUSTOMER
+		WHERE 1 = 1
+		<include refid="whereSQL" />
+	</select>
+	<!-- 插入  2016-01-03 -->
+	<insert id="insert" parameterType="com.zhaoci.share.customer.po.Customer">
+        INSERT INTO CUSTOMER (
+        	id,
+        	name,
+        	phone,
+        	adress,
+        	email,
+        	sex,
+        	age
+        ) VALUES (
+        	#{id},
+        	#{name},
+        	#{phone},
+        	#{adress},
+        	#{email},
+        	#{sex},
+        	#{age}
+        )
+	</insert>
+
+	<!-- 根据主键ID删除  2016-01-03 -->
+	<delete id="delete">
+		DELETE FROM CUSTOMER 
+		 WHERE id = #{id} 
+	</delete>
+
+	<!-- 更新  2016-01-03 -->
+	<update id="update" parameterType="com.zhaoci.share.customer.po.Customer">
+        UPDATE CUSTOMER 
+		SET
+	        name = #{name},
+	        phone = #{phone},
+	        adress = #{adress},
+	        email = #{email},
+	        sex = #{sex},
+	        age = #{age}
+        WHERE id = #{id} 	        
+	</update>
+
+	<update id="batchUpdate">
+		<foreach collection="list" item="item" open="" close="" separator=";">
+			UPDATE CUSTOMER
+			<set>
+    	        name = #{item.name},
+    	        phone = #{item.phone},
+    	        adress = #{item.adress},
+    	        email = #{item.email},
+				sex = #{item.sex},
+				age = #{item.age}
+			</set>
+            WHERE id = #{item.id} 	
+		</foreach>
+	</update>
+</mapper>

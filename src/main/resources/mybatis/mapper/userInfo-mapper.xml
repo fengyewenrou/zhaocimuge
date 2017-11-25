@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhaoci.share.user.dao.UserInfoDao">
+	
+	<!-- 列结果resultMap  2016-01-03 -->
+	<resultMap id="resultMap" type="com.zhaoci.share.user.po.UserInfo">
+        <result column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="sex" property="sex"/>
+        <result column="age" property="age"/>
+        <result column="adress" property="adress"/>
+        <result column="email" property="email"/>
+        <result column="password" property="password"/>
+        <result column="comment" property="comment"/>
+        <result column="flag" property="flag"/>
+        <result column="createDate" property="createDate"/>
+        <result column="updateDate" property="updateDate"/>
+        <result column="createUser" property="createUser"/>
+        <result column="updateUser" property="updateUser"/>
+	</resultMap>
+
+	<!-- 公共列  2016-01-03 -->
+	<sql id="columns">
+		id, name,  email, password
+	</sql>
+
+	<!-- 公共条件  2016-01-03 -->
+	<sql id="whereSQL">
+		<if test="id != null and id != '' ">
+		AND id = #{id}
+		</if>
+		<if test="name != null and name != '' ">
+		AND name = #{name}
+		</if>
+		<if test="email != null and email != '' ">
+		AND email = #{email}
+		</if>
+		<if test="password != null and password != '' ">
+		AND password = #{password}
+		</if>
+	</sql>
+
+	<!-- 公共分页条件SQL  2016-01-03 -->
+	<sql id="wherePageSql">
+		<if test="params.id != null and params.id != '' ">
+		AND id = #{params.id}
+		</if>
+		<if test="params.name != null and params.name != '' ">
+		AND name = #{params.name}
+		</if>
+		<if test="params.email != null and params.email != '' ">
+		AND email = #{params.email}
+		</if>
+		<if test="params.password != null and params.password != '' ">
+		AND password = #{params.password}
+		</if>
+	</sql>
+
+	<!-- 根据主键ID查询  2016-01-03 -->
+	<select id="queryById" resultMap="resultMap">
+		SELECT <include refid="columns" />
+		  FROM USER_INFO 
+	     WHERE id = #{id}     
+	</select>
+
+	<!-- 查询列表  2016-01-03 -->
+	<select id="selectList" resultMap="resultMap">
+		SELECT <include refid="columns" />
+		  FROM USER_INFO
+		 WHERE 1 = 1	
+		 <include refid="whereSQL" />
+	</select>
+
+	<!-- 查询分页列表  2016-01-03 -->
+	<select id="queryListPage" resultMap="resultMap">
+		SELECT <include refid="columns" />
+		  FROM USER_INFO
+		 WHERE 1 = 1
+		 <include refid="wherePageSql" />
+	</select>
+
+	<!-- 插入  2016-01-03 -->
+	<insert id="insert" parameterType="com.zhaoci.share.user.po.UserInfo">
+        INSERT INTO USER_INFO (
+        	id,
+        	name,
+        	email,
+        	password
+        ) VALUES (
+        	#{id},
+        	#{name},
+        	#{email},
+        	#{password}
+        )
+	</insert>
+
+	<!-- 根据主键ID删除  2016-01-03 -->
+	<delete id="delete">
+		DELETE FROM USER_INFO 
+		 WHERE id = #{id} 
+	</delete>
+
+	<!-- 更新  2016-01-03 -->
+	<update id="update" parameterType="com.zhaoci.share.user.po.UserInfo">
+        UPDATE USER_INFO 
+		SET
+	        name = #{name},
+	        email = #{email},
+	        password = #{password}
+        WHERE id = #{id}
+	</update>
+
+	<update id="batchUpdate">
+		<foreach collection="list" item="item" open="" close="" separator=";">
+			UPDATE USER_INFO
+			<set>
+    	        name = #{item.name},
+    	        email = #{item.email},
+    	        password = #{item.password}
+			</set>
+            WHERE id = #{item.id} 	
+		</foreach>
+	</update>
+</mapper>

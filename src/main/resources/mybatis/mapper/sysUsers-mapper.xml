@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhaoci.share.user.dao.SysUsersDao">
+	
+	<!-- 列结果resultMap  2016-01-03 -->
+	<resultMap id="resultMap" type="com.zhaoci.share.user.po.SysUsers">
+        <result column="USER_ID" property="userId"/>
+        <result column="USER_ACCOUNT" property="userAccount"/>
+        <result column="USER_NAME" property="userName"/>
+        <result column="USER_PASSWORD" property="userPassword"/>
+        <result column="USER_DESC" property="userDesc"/>
+        <result column="ENABLED" property="enabled"/>
+        <result column="ISSYS" property="issys"/>
+        <result column="USER_DEPT" property="userDept"/>
+        <result column="USER_DUTY" property="userDuty"/>
+        <result column="SUB_SYSTEM" property="subSystem"/>
+		<result column="module" property="module"/>
+		<result column="role_id" property="roleId"/>
+		<result column="photo" property="photo"/>
+		<result column="sex" property="sex"/>
+		<result column="age" property="age"/>
+		<result column="address" property="address"/>
+		<result column="email" property="email"/>
+		<result column="mobile" property="mobile"/>
+	</resultMap>
+	<resultMap id="resultRoleMap" type="com.zhaoci.share.user.po.SysUsers">
+        <result column="USER_ID" property="userId"/>
+        <result column="USER_ACCOUNT" property="userAccount"/>
+        <result column="USER_NAME" property="userName"/>
+        <result column="USER_PASSWORD" property="userPassword"/>
+        <collection property="sysRolesList" ofType="com.zhaoci.share.user.po.SysRoles">
+        	<result column="ROLE_ID" property="roleId"/>
+        	<result column="ROLE_NAME" property="roleName"/>
+        </collection>
+	</resultMap>
+
+	<!-- 公共列  2016-01-03 -->
+	<sql id="columns">
+		USER_ID, USER_ACCOUNT, USER_NAME, USER_PASSWORD, USER_DESC, ENABLED, ISSYS, USER_DEPT, USER_DUTY, SUB_SYSTEM,module,role_id,photo,sex,age,address,email,mobile
+	</sql>
+
+	<!-- 公共条件  2016-01-03 -->
+	<sql id="whereSQL">
+		<if test="userId != null and userId != '' ">
+		AND USER_ID = #{userId}
+		</if>
+		<if test="userAccount != null and userAccount != '' ">
+		AND USER_ACCOUNT = #{userAccount}
+		</if>
+		<if test="userName != null and userName != '' ">
+		AND USER_NAME = #{userName}
+		</if>
+		<if test="userPassword != null and userPassword != '' ">
+		AND USER_PASSWORD = #{userPassword}
+		</if>
+		<if test="userDesc != null and userDesc != '' ">
+		AND USER_DESC = #{userDesc}
+		</if>
+		<if test="enabled != null and enabled != '' ">
+		AND ENABLED = #{enabled}
+		</if>
+		<if test="issys != null and issys != '' ">
+		AND ISSYS = #{issys}
+		</if>
+		<if test="userDept != null and userDept != '' ">
+		AND USER_DEPT = #{userDept}
+		</if>
+		<if test="userDuty != null and userDuty != '' ">
+		AND USER_DUTY = #{userDuty}
+		</if>
+		<if test="subSystem != null and subSystem != '' ">
+		AND SUB_SYSTEM = #{subSystem}
+		</if>
+		<if test="module != null and module != '' ">
+			AND module = #{module}
+		</if>
+		<if test="roleId != null and roleId != '' ">
+			AND role_id = #{roleId}
+		</if>
+	</sql>
+
+	<!-- 公共分页条件SQL  2016-01-03 -->
+	<sql id="wherePageSql">
+		<if test="params.userId != null and params.userId != '' ">
+		AND USER_ID = #{params.userId}
+		</if>
+		<if test="params.userAccount != null and params.userAccount != '' ">
+		AND USER_ACCOUNT = #{params.userAccount}
+		</if>
+		<if test="params.userName != null and params.userName != '' ">
+		AND USER_NAME = #{params.userName}
+		</if>
+		<if test="params.userPassword != null and params.userPassword != '' ">
+		AND USER_PASSWORD = #{params.userPassword}
+		</if>
+		<if test="params.userDesc != null and params.userDesc != '' ">
+		AND USER_DESC = #{params.userDesc}
+		</if>
+		<if test="params.enabled != null and params.enabled != '' ">
+		AND ENABLED = #{params.enabled}
+		</if>
+		<if test="params.issys != null and params.issys != '' ">
+		AND ISSYS = #{params.issys}
+		</if>
+		<if test="params.userDept != null and params.userDept != '' ">
+		AND USER_DEPT = #{params.userDept}
+		</if>
+		<if test="params.userDuty != null and params.userDuty != '' ">
+		AND USER_DUTY = #{params.userDuty}
+		</if>
+		<if test="params.subSystem != null and params.subSystem != '' ">
+		AND SUB_SYSTEM = #{params.subSystem}
+		</if>
+		<if test="params.module != null and params.module != '' ">
+			AND module = #{params.module}
+		</if>
+		<if test="params.roleId != null and params.roleId != '' ">
+			AND role_id = #{params.roleId}
+		</if>
+	</sql>
+
+	<!-- 根据主键ID查询  2016-01-03 -->
+	<select id="queryById" resultMap="resultMap">
+		SELECT <include refid="columns" />
+		  FROM SYS_USERS 
+	     WHERE USER_ID = #{userId}     
+	</select>
+
+	<!-- 查询列表  2016-01-03 -->
+	<select id="selectList" resultMap="resultMap">
+		SELECT <include refid="columns" />
+		  FROM SYS_USERS
+		 WHERE 1 = 1	
+		 <include refid="whereSQL" />
+	</select>
+
+	<select id="queryUserRoleByAccount" resultMap="resultRoleMap" >
+		SELECT a.USER_ID,b.USER_NAME,b.USER_ACCOUNT,b.USER_PASSWORD,a.ROLE_ID,c.ROLE_NAME
+		  FROM sys_users_roles a inner join sys_users b on a.USER_ID=b.USER_ID inner join sys_roles c on a.ROLE_ID=c.ROLE_ID
+		 WHERE a.ENABLED=1 and b.ENABLED=1 and c.ENABLED=1 and USER_ACCOUNT = #{userAccount}
+	</select>
+
+	<select id="queryUserByRole" resultMap="resultRoleMap" >
+		SELECT a.USER_ID,b.USER_NAME,b.USER_ACCOUNT,b.USER_PASSWORD,a.ROLE_ID,c.ROLE_NAME
+		  FROM sys_users_roles a inner join sys_users b on a.USER_ID=b.USER_ID inner join sys_roles c on a.ROLE_ID=c.ROLE_ID
+		 WHERE a.ENABLED=1 and b.ENABLED=1 and c.ENABLED=1 and a.ROLE_ID = #{roleId}
+	</select>
+	
+	<!-- 查询分页列表  2016-01-03 -->
+	<select id="queryListPage" resultMap="resultMap">
+		SELECT <include refid="columns" />
+		  FROM SYS_USERS
+		 WHERE 1 = 1
+		 <include refid="wherePageSql" />
+	</select>
+
+	<!-- 插入  2016-01-03 -->
+	<insert id="insert" parameterType="com.zhaoci.share.user.po.SysUsers">
+        INSERT INTO SYS_USERS (
+        	USER_ID,
+        	USER_ACCOUNT,
+        	USER_NAME,
+        	USER_PASSWORD,
+        	USER_DESC,
+        	ENABLED,
+        	ISSYS,
+        	USER_DEPT,
+        	USER_DUTY,
+        	SUB_SYSTEM,
+        	module,
+        	role_id,
+        	photo,
+        	sex,
+        	age,
+        	address,
+        	email,
+        	mobile
+        ) VALUES (
+        	#{userId},
+        	#{userAccount},
+        	#{userName},
+        	#{userPassword},
+        	#{userDesc},
+        	#{enabled},
+        	#{issys},
+        	#{userDept},
+        	#{userDuty},
+        	#{subSystem},
+        	#{module},
+        	#{roleId},
+        	#{photo},
+        	#{sex},
+        	#{age},
+        	#{address},
+        	#{email},
+        	#{mobile}
+        )
+	</insert>
+
+	<!-- 根据主键ID删除  2016-01-03 -->
+	<delete id="delete">
+		DELETE FROM SYS_USERS 
+		 WHERE USER_ID = #{userId} 
+	</delete>
+
+	<!-- 更新  2016-01-03 -->
+	<update id="update" parameterType="com.zhaoci.share.user.po.SysUsers">
+        UPDATE SYS_USERS 
+		SET
+	        USER_ACCOUNT = #{userAccount},
+	        USER_NAME = #{userName},
+	        USER_PASSWORD = #{userPassword},
+	        USER_DESC = #{userDesc},
+	        ENABLED = #{enabled},
+	        ISSYS = #{issys},
+	        USER_DEPT = #{userDept},
+	        USER_DUTY = #{userDuty},
+	        SUB_SYSTEM = #{subSystem},
+	        module=#{module},
+			role_id = #{roleId},
+			photo = #{photo},
+			sex = #{sex},
+			age = #{age},
+			address = #{address},
+			email = #{email},
+			mobile = #{mobile}
+        WHERE USER_ID = #{userId} 	        
+	</update>
+
+	<update id="batchUpdate">
+		<foreach collection="list" item="item" open="" close="" separator=";">
+			UPDATE SYS_USERS
+			<set>
+    	        USER_ACCOUNT = #{item.userAccount},
+    	        USER_NAME = #{item.userName},
+    	        USER_PASSWORD = #{item.userPassword},
+    	        USER_DESC = #{item.userDesc},
+    	        ENABLED = #{item.enabled},
+    	        ISSYS = #{item.issys},
+    	        USER_DEPT = #{item.userDept},
+    	        USER_DUTY = #{item.userDuty},
+    	        SUB_SYSTEM = #{item.subSystem},
+				role_id = #{item.roleId}
+			</set>
+            WHERE USER_ID = #{item.userId} 	
+		</foreach>
+	</update>
+</mapper>

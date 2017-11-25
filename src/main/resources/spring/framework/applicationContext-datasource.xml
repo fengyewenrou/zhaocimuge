@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans   
+    http://www.springframework.org/schema/beans/spring-beans-3.1.xsd   
+    http://www.springframework.org/schema/tx   
+    http://www.springframework.org/schema/tx/spring-tx-3.1.xsd  
+    http://www.springframework.org/schema/context  
+    http://www.springframework.org/schema/context/spring-context-3.1.xsd   
+    http://www.springframework.org/schema/aop  
+   	http://www.springframework.org/schema/aop/spring-aop.xsd">
+	    
+	
+	<!-- 主数据源，使用alibaba druid连接池  fanfuchen 2016-1-2 -->
+	<bean id="master" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+		<property name="name" value="${master.name}"/>
+		<property name="url" value="${master.url}"/>
+		<property name="username" value="${master.username}"/>
+		<property name="password" value="${master.password}"/>
+		<property name="driverClassName" value="${master.driverClassName}"/>
+		<property name="initialSize" value="${master.initialSize}"/>
+		<property name="maxActive" value="${master.maxActive}"/>
+		<property name="minIdle" value="${master.minIdle}"/>
+		<property name="maxWait" value="${master.maxWait}"/>
+		<property name="useUnfairLock" value="${master.useUnfairLock}"/>
+		<property name="validationQuery" value="${master.validationQuery}"/>
+		<property name="testOnBorrow" value="${master.testOnBorrow}"/>
+		<property name="testOnReturn" value="${master.testOnReturn}"/>
+		<property name="testWhileIdle" value="${master.testWhileIdle}"/>
+		<property name="timeBetweenEvictionRunsMillis" value="${master.timeBetweenEvictionRunsMillis}"/>
+		<property name="minEvictableIdleTimeMillis" value="${master.minEvictableIdleTimeMillis}"/>
+		<property name="filters" value="${master.filters}" />   
+	</bean>
+	<!-- 总数据源  fanfuchen 2016-1-2 -->
+	<bean id="dataSource" class="com.zhaoci.framework.base.datasource.DynamicDataSource">
+		<property name="targetDataSources">
+			<map key-type="java.lang.String">
+				<entry key="master" value-ref="master" />
+			</map>
+		</property>
+		<property name="defaultTargetDataSource" ref="master"></property>
+	</bean>
+	
+	<!-- 数据源Aspect fanfuchen 2016-1-2 -->
+	<bean id="dataSourceAspect" class="com.zhaoci.framework.base.datasource.DataSourceAspect" />
+	
+	<!-- 数据源AOP fanfuchen 2016-1-2 -->
+	<aop:config>
+		<aop:aspect order="1" ref="dataSourceAspect">
+			<!-- 任意修饰符  + com.zhaoci.share.之后的任意包名  + 任意以Service结尾的类名 + 任意方法 + 任意参数名 -->
+           <aop:pointcut id="dsPointCut" expression="execution(* com.zhaoci.share..*Service.*(..))"/>
+           <aop:before pointcut-ref="dsPointCut" method="before"/>
+       </aop:aspect>
+	</aop:config>
+	
+</beans>
