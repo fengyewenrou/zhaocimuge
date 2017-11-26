@@ -2,10 +2,10 @@
 <!DOCTYPE mapper
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.zhaoci.share.store.dao.CustomerTaleDao">
+<mapper namespace="com.zhaoci.share.story.dao.CustomerTaleDao">
 	
 	<!-- 列结果resultMap boxiang 2016-01-03 -->
-	<resultMap id="resultMap" type="com.zhaoci.share.store.po.CustomerTale">
+	<resultMap id="resultMap" type="com.zhaoci.share.story.po.CustomerTale">
         <result column="id" property="id"/>
         <result column="customer_id" property="customerId"/>
         <result column="tale_id" property="taleId"/>
@@ -94,7 +94,7 @@
 	</select>
 
 	<!-- 插入 boxiang 2016-01-03 -->
-	<insert id="insert" parameterType="com.zhaoci.share.store.po.CustomerTale">
+	<insert id="insert" parameterType="com.zhaoci.share.story.po.CustomerTale">
         INSERT INTO T_CUSTOMER_TALE (
         	id,
         	customer_id,
@@ -121,7 +121,7 @@
 	</delete>
 
 	<!-- 更新 boxiang 2016-01-03 -->
-	<update id="update" parameterType="com.zhaoci.share.store.po.CustomerTale">
+	<update id="update" parameterType="com.zhaoci.share.story.po.CustomerTale">
         UPDATE T_CUSTOMER_TALE 
 		SET
 	        customer_id = #{customerId},

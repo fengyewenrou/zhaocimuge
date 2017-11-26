@@ -2,10 +2,10 @@
 <!DOCTYPE mapper
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.zhaoci.share.store.dao.TaleTypeDao">
+<mapper namespace="com.zhaoci.share.story.dao.TaleTypeDao">
 	
 	<!-- 列结果resultMap boxiang 2016-01-03 -->
-	<resultMap id="resultMap" type="com.zhaoci.share.store.po.TaleType">
+	<resultMap id="resultMap" type="com.zhaoci.share.story.po.TaleType">
         <result column="id" property="id"/>
         <result column="tale_id" property="taleId"/>
         <result column="type_id" property="typeId"/>
@@ -87,7 +87,7 @@
 	</select>
 
 	<!-- 插入 boxiang 2016-01-03 -->
-	<insert id="insert" parameterType="com.zhaoci.share.store.po.TaleType">
+	<insert id="insert" parameterType="com.zhaoci.share.story.po.TaleType">
         INSERT INTO T_TALE_TYPE (
         	id,
         	tale_id,
@@ -112,7 +112,7 @@
 	</delete>
 
 	<!-- 更新 boxiang 2016-01-03 -->
-	<update id="update" parameterType="com.zhaoci.share.store.po.TaleType">
+	<update id="update" parameterType="com.zhaoci.share.story.po.TaleType">
         UPDATE T_TALE_TYPE 
 		SET
 	        tale_id = #{taleId},
