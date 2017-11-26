@@ -9,7 +9,7 @@
         <result column="id" property="id"/>
         <result column="name" property="name"/>
         <result column="phone" property="phone"/>
-        <result column="address" property="addßress"/>
+        <result column="address" property="address"/>
         <result column="email" property="email"/>
         <result column="sex" property="sex"/>
         <result column="age" property="age"/>
