@@ -21,10 +21,10 @@ public class Tale implements Serializable {
 	private String image;
 
 	/** 创建时间 */
-	private java.util.Date createDate;
+	private String createDate;
 
 	/** 修改时间 */
-	private java.util.Date updateDate;
+	private String updateDate;
 
 	/** 作者 */
 	private String writer;
@@ -93,20 +93,20 @@ public class Tale implements Serializable {
 		return this.image;
 	}
 
-	public void setCreateDate(java.util.Date createDate) {
-		this.createDate = createDate;
-	}
-	
-	public java.util.Date getCreateDate() {
-		return this.createDate;
+	public String getCreateDate() {
+		return createDate;
 	}
 
-	public void setUpdateDate(java.util.Date updateDate) {
-		this.updateDate = updateDate;
+	public void setCreateDate(String createDate) {
+		this.createDate = createDate;
 	}
-	
-	public java.util.Date getUpdateDate() {
-		return this.updateDate;
+
+	public String getUpdateDate() {
+		return updateDate;
+	}
+
+	public void setUpdateDate(String updateDate) {
+		this.updateDate = updateDate;
 	}
 
 	public void setWriter(String writer) {

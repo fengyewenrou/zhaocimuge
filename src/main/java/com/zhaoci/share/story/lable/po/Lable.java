@@ -1,5 +1,8 @@
 package com.zhaoci.share.story.lable.po;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.io.Serializable;
 
 public class Lable implements Serializable {
@@ -12,7 +15,7 @@ public class Lable implements Serializable {
 	private String lable;
 
 	/**  */
-	private java.util.Date createDate;
+	private String createDate;
 
 	/** 是否可用，1是0否 */
 	private String isUsed;
@@ -39,12 +42,12 @@ public class Lable implements Serializable {
 		return this.lable;
 	}
 
-	public void setCreateDate(java.util.Date createDate) {
-		this.createDate = createDate;
+	public String getCreateDate() {
+		return createDate;
 	}
-	
-	public java.util.Date getCreateDate() {
-		return this.createDate;
+
+	public void setCreateDate(String createDate) {
+		this.createDate = createDate;
 	}
 
 	public void setIsUsed(String isUsed) {

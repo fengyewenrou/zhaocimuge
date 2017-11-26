@@ -18,7 +18,7 @@ public class StoryType implements Serializable {
 	private String isUsed;
 
 	/**  */
-	private java.util.Date createDate;
+	private String createDate;
 
 	public void setId(Integer id) {
 		this.id = id;
@@ -52,12 +52,11 @@ public class StoryType implements Serializable {
 		return this.isUsed;
 	}
 
-	public void setCreateDate(java.util.Date createDate) {
-		this.createDate = createDate;
-	}
-	
-	public java.util.Date getCreateDate() {
-		return this.createDate;
+	public String getCreateDate() {
+		return createDate;
 	}
 
+	public void setCreateDate(String createDate) {
+		this.createDate = createDate;
+	}
 }

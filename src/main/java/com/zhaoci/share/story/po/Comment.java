@@ -18,10 +18,10 @@ public class Comment implements Serializable {
 	private String comment;
 
 	/**  */
-	private java.util.Date createDate;
+	private String createDate;
 
 	/**  */
-	private java.util.Date updateDate;
+	private String updateDate;
 
 	public void setId(Integer id) {
 		this.id = id;
@@ -55,20 +55,19 @@ public class Comment implements Serializable {
 		return this.comment;
 	}
 
-	public void setCreateDate(java.util.Date createDate) {
+	public String getCreateDate() {
+		return createDate;
+	}
+
+	public void setCreateDate(String createDate) {
 		this.createDate = createDate;
 	}
-	
-	public java.util.Date getCreateDate() {
-		return this.createDate;
+
+	public String getUpdateDate() {
+		return updateDate;
 	}
 
-	public void setUpdateDate(java.util.Date updateDate) {
+	public void setUpdateDate(String updateDate) {
 		this.updateDate = updateDate;
 	}
-	
-	public java.util.Date getUpdateDate() {
-		return this.updateDate;
-	}
-
 }

@@ -14,11 +14,13 @@
         <result column="sex" property="sex"/>
         <result column="age" property="age"/>
         <result column="synopsis" property="synopsis"/>
+		<result column="create_date" property="createDate"/>
+		<result column="update_date" property="updateDate"/>
 	</resultMap>
 
 	<!-- 公共列  2016-01-03 -->
 	<sql id="columns">
-		id, name, phone, address, email,sex,age
+		id, name, phone, address, email,sex,age,create_date,update_date
 	</sql>
 
 	<!-- 公共条件  2016-01-03 -->
@@ -38,6 +40,12 @@
 		<if test="email != null and email != '' ">
 		AND email = #{email}
 		</if>
+		<if test="createDate != null and createDate != '' ">
+			AND create_date = #{createDate}
+		</if>
+		<if test="updateDate != null and updateDate != '' ">
+			AND update_date = #{updateDate}
+		</if>
 	</sql>
 
 	<!-- 公共分页条件SQL  2016-01-03 -->
@@ -56,6 +64,12 @@
 		</if>
 		<if test="params.email != null and params.email != '' ">
 		AND email = #{params.email}
+		</if>
+		<if test="params.createDate != null and params.createDate != '' ">
+			AND create_date = #{params.createDate}
+		</if>
+		<if test="params.updateDate != null and params.updateDate != '' ">
+			AND update_date = #{params.updateDate}
 		</if>
 	</sql>
 
@@ -97,7 +111,9 @@
         	email,
         	sex,
         	age,
-        	synopsis
+        	synopsis,
+        	create_date,
+        	update_date
         ) VALUES (
         	#{id},
         	#{name},
@@ -106,7 +122,9 @@
         	#{email},
         	#{sex},
         	#{age},
-        	#{synopsis}
+        	#{synopsis},
+        	#{createDate},
+        	#{updateDate}
         )
 	</insert>
 
@@ -126,7 +144,9 @@
 	        email = #{email},
 	        sex = #{sex},
 	        age = #{age},
-	        synopsis = #{synopsis}
+	        synopsis = #{synopsis},
+			create_date = #{createDate}
+			update_date = #{updateDate}
         WHERE id = #{id}
 	</update>
 

@@ -11,8 +11,18 @@
     http://www.springframework.org/schema/context/spring-context-3.1.xsd  
     http://www.springframework.org/schema/mvc  
     http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd">
-    
+
 	<mvc:annotation-driven/>
+	<mvc:annotation-driven conversion-service="conversionService"/>
+
+	<bean id="conversionService"
+		  class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+		<property name="converters">
+			<list>
+				<!-- <bean class="com.ll.model.StringToPersonConverter" /> -->
+			</list>
+		</property>
+	</bean>
 	<!-- 扫描所有的controller 但是不扫描service-->    
 	<context:component-scan base-package="com.zhaoci.share">
 		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />

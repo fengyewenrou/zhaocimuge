@@ -18,10 +18,10 @@ public class TaleLable implements Serializable {
 	private String isUsed;
 
 	/**  */
-	private java.util.Date createDate;
+	private  String createDate;
 
 	/**  */
-	private java.util.Date updateDate;
+	private String updateDate;
 
 	public void setId(Integer id) {
 		this.id = id;
@@ -55,20 +55,13 @@ public class TaleLable implements Serializable {
 		return this.isUsed;
 	}
 
-	public void setCreateDate(java.util.Date createDate) {
+	public void setCreateDate(String createDate) {
 		this.createDate = createDate;
 	}
-	
-	public java.util.Date getCreateDate() {
-		return this.createDate;
-	}
 
-	public void setUpdateDate(java.util.Date updateDate) {
+	public void setUpdateDate(String updateDate) {
 		this.updateDate = updateDate;
 	}
-	
-	public java.util.Date getUpdateDate() {
-		return this.updateDate;
-	}
+
 
 }
