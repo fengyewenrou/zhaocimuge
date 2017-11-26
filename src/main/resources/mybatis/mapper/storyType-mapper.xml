@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhaoci.share.store.dao.StoryTypeDao">
+	
+	<!-- 列结果resultMap boxiang 2016-01-03 -->
+	<resultMap id="resultMap" type="com.zhaoci.share.store.po.StoryType">
+        <result column="id" property="id"/>
+        <result column="type_name" property="typeName"/>
+        <result column="type_desc" property="typeDesc"/>
+        <result column="is_used" property="isUsed"/>
+        <result column="createDate" property="createDate"/>
+	</resultMap>
+
+	<!-- 公共列 boxiang 2016-01-03 -->
+	<sql id="columns">
+		id, type_name, type_desc, is_used, createDate
+	</sql>
+
+	<!-- 公共条件 boxiang 2016-01-03 -->
+	<sql id="whereSQL">
+		<if test="id != null and id != '' ">
+		AND id = #{id}
+		</if>
+		<if test="typeName != null and typeName != '' ">
+		AND type_name = #{typeName}
+		</if>
+		<if test="typeDesc != null and typeDesc != '' ">
+		AND type_desc = #{typeDesc}
+		</if>
+		<if test="isUsed != null and isUsed != '' ">
+		AND is_used = #{isUsed}
+		</if>
+		<if test="createDate != null and createDate != '' ">
+		AND createDate = #{createDate}
+		</if>
+	</sql>
+
+	<!-- 公共分页条件SQL boxiang 2016-01-03 -->
+	<sql id="wherePageSql">
+		<if test="params.id != null and params.id != '' ">
+		AND id = #{params.id}
+		</if>
+		<if test="params.typeName != null and params.typeName != '' ">
+		AND type_name = #{params.typeName}
+		</if>
+		<if test="params.typeDesc != null and params.typeDesc != '' ">
+		AND type_desc = #{params.typeDesc}
+		</if>
+		<if test="params.isUsed != null and params.isUsed != '' ">
+		AND is_used = #{params.isUsed}
+		</if>
+		<if test="params.createDate != null and params.createDate != '' ">
+		AND createDate = #{params.createDate}
+		</if>
+	</sql>
+
+	<!-- 根据主键ID查询 boxiang 2016-01-03 -->
+	<select id="queryById" resultMap="resultMap">
+		SELECT <include refid="columns" />
+		  FROM T_STORY_TYPE 
+	     WHERE id = #{id}     
+	</select>
+
+	<!-- 查询列表 boxiang 2016-01-03 -->
+	<select id="selectList" resultMap="resultMap">
+		SELECT <include refid="columns" />
+		  FROM T_STORY_TYPE
+		 WHERE 1 = 1	
+		 <include refid="whereSQL" />
+	</select>
+
+	<!-- 查询分页列表 boxiang 2016-01-03 -->
+	<select id="queryListPage" resultMap="resultMap">
+		SELECT <include refid="columns" />
+		  FROM T_STORY_TYPE
+		 WHERE 1 = 1
+		 <include refid="wherePageSql" />
+	</select>
+
+	<!-- 插入 boxiang 2016-01-03 -->
+	<insert id="insert" parameterType="com.zhaoci.share.store.po.StoryType">
+        INSERT INTO T_STORY_TYPE (
+        	id,
+        	type_name,
+        	type_desc,
+        	is_used,
+        	createDate
+        ) VALUES (
+        	#{id},
+        	#{typeName},
+        	#{typeDesc},
+        	#{isUsed},
+        	#{createDate}
+        )
+	</insert>
+
+	<!-- 根据主键ID删除 boxiang 2016-01-03 -->
+	<delete id="delete">
+		DELETE FROM T_STORY_TYPE 
+		 WHERE id = #{id} 
+	</delete>
+
+	<!-- 更新 boxiang 2016-01-03 -->
+	<update id="update" parameterType="com.zhaoci.share.store.po.StoryType">
+        UPDATE T_STORY_TYPE 
+		SET
+	        type_name = #{typeName},
+	        type_desc = #{typeDesc},
+	        is_used = #{isUsed},
+	        createDate = #{createDate}
+        WHERE id = #{id} 	        
+	</update>
+
+	<update id="batchUpdate">
+		<foreach collection="list" item="item" open="" close="" separator=";">
+			UPDATE T_STORY_TYPE
+			<set>
+    	        type_name = #{item.typeName},
+    	        type_desc = #{item.typeDesc},
+    	        is_used = #{item.isUsed},
+    	        createDate = #{item.createDate}
+			</set>
+            WHERE id = #{item.id} 	
+		</foreach>
+	</update>
+</mapper>

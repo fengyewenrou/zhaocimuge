@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhaoci.share.store.dao.CustomerTaleDao">
+	
+	<!-- 列结果resultMap boxiang 2016-01-03 -->
+	<resultMap id="resultMap" type="com.zhaoci.share.store.po.CustomerTale">
+        <result column="id" property="id"/>
+        <result column="customer_id" property="customerId"/>
+        <result column="tale_id" property="taleId"/>
+        <result column="type" property="type"/>
+        <result column="is_used" property="isUsed"/>
+        <result column="create_date" property="createDate"/>
+        <result column="update_date" property="updateDate"/>
+	</resultMap>
+
+	<!-- 公共列 boxiang 2016-01-03 -->
+	<sql id="columns">
+		id, customer_id, tale_id, type, is_used, create_date, update_date
+	</sql>
+
+	<!-- 公共条件 boxiang 2016-01-03 -->
+	<sql id="whereSQL">
+		<if test="id != null and id != '' ">
+		AND id = #{id}
+		</if>
+		<if test="customerId != null and customerId != '' ">
+		AND customer_id = #{customerId}
+		</if>
+		<if test="taleId != null and taleId != '' ">
+		AND tale_id = #{taleId}
+		</if>
+		<if test="type != null and type != '' ">
+		AND type = #{type}
+		</if>
+		<if test="isUsed != null and isUsed != '' ">
+		AND is_used = #{isUsed}
+		</if>
+		<if test="createDate != null and createDate != '' ">
+		AND create_date = #{createDate}
+		</if>
+		<if test="updateDate != null and updateDate != '' ">
+		AND update_date = #{updateDate}
+		</if>
+	</sql>
+
+	<!-- 公共分页条件SQL boxiang 2016-01-03 -->
+	<sql id="wherePageSql">
+		<if test="params.id != null and params.id != '' ">
+		AND id = #{params.id}
+		</if>
+		<if test="params.customerId != null and params.customerId != '' ">
+		AND customer_id = #{params.customerId}
+		</if>
+		<if test="params.taleId != null and params.taleId != '' ">
+		AND tale_id = #{params.taleId}
+		</if>
+		<if test="params.type != null and params.type != '' ">
+		AND type = #{params.type}
+		</if>
+		<if test="params.isUsed != null and params.isUsed != '' ">
+		AND is_used = #{params.isUsed}
+		</if>
+		<if test="params.createDate != null and params.createDate != '' ">
+		AND create_date = #{params.createDate}
+		</if>
+		<if test="params.updateDate != null and params.updateDate != '' ">
+		AND update_date = #{params.updateDate}
+		</if>
+	</sql>
+
+	<!-- 根据主键ID查询 boxiang 2016-01-03 -->
+	<select id="queryById" resultMap="resultMap">
+		SELECT <include refid="columns" />
+		  FROM T_CUSTOMER_TALE 
+	     WHERE id = #{id}     
+	</select>
+
+	<!-- 查询列表 boxiang 2016-01-03 -->
+	<select id="selectList" resultMap="resultMap">
+		SELECT <include refid="columns" />
+		  FROM T_CUSTOMER_TALE
+		 WHERE 1 = 1	
+		 <include refid="whereSQL" />
+	</select>
+
+	<!-- 查询分页列表 boxiang 2016-01-03 -->
+	<select id="queryListPage" resultMap="resultMap">
+		SELECT <include refid="columns" />
+		  FROM T_CUSTOMER_TALE
+		 WHERE 1 = 1
+		 <include refid="wherePageSql" />
+	</select>
+
+	<!-- 插入 boxiang 2016-01-03 -->
+	<insert id="insert" parameterType="com.zhaoci.share.store.po.CustomerTale">
+        INSERT INTO T_CUSTOMER_TALE (
+        	id,
+        	customer_id,
+        	tale_id,
+        	type,
+        	is_used,
+        	create_date,
+        	update_date
+        ) VALUES (
+        	#{id},
+        	#{customerId},
+        	#{taleId},
+        	#{type},
+        	#{isUsed},
+        	#{createDate},
+        	#{updateDate}
+        )
+	</insert>
+
+	<!-- 根据主键ID删除 boxiang 2016-01-03 -->
+	<delete id="delete">
+		DELETE FROM T_CUSTOMER_TALE 
+		 WHERE id = #{id} 
+	</delete>
+
+	<!-- 更新 boxiang 2016-01-03 -->
+	<update id="update" parameterType="com.zhaoci.share.store.po.CustomerTale">
+        UPDATE T_CUSTOMER_TALE 
+		SET
+	        customer_id = #{customerId},
+	        tale_id = #{taleId},
+	        type = #{type},
+	        is_used = #{isUsed},
+	        create_date = #{createDate},
+	        update_date = #{updateDate}
+        WHERE id = #{id} 	        
+	</update>
+
+	<update id="batchUpdate">
+		<foreach collection="list" item="item" open="" close="" separator=";">
+			UPDATE T_CUSTOMER_TALE
+			<set>
+    	        customer_id = #{item.customerId},
+    	        tale_id = #{item.taleId},
+    	        type = #{item.type},
+    	        is_used = #{item.isUsed},
+    	        create_date = #{item.createDate},
+    	        update_date = #{item.updateDate}
+			</set>
+            WHERE id = #{item.id} 	
+		</foreach>
+	</update>
+</mapper>
