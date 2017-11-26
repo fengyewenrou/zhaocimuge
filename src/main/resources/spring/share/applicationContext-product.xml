@@ -15,4 +15,12 @@
 		<property name="mapperInterface" value="com.zhaoci.share.timeline.dao.TimelineDao"/>
 		<property name="sqlSessionFactory" ref="sqlSessionFactory"/>
 	</bean>
+	<bean id="taleDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.zhaoci.share.story.tale.dao.TaleDao"/>
+		<property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+	</bean>
+	<bean id="lableDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.zhaoci.share.story.lable.dao.LableDao"/>
+		<property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+	</bean>
 </beans>

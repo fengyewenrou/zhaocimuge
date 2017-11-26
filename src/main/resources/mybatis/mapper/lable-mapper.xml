@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhaoci.share.story.lable.dao.LableDao">
+	
+	<!-- 列结果resultMap zhaoci 2016-01-03 -->
+	<resultMap id="resultMap" type="com.zhaoci.share.story.lable.po.Lable">
+        <result column="id" property="id"/>
+        <result column="lable" property="lable"/>
+        <result column="createDate" property="createDate"/>
+        <result column="is_used" property="isUsed"/>
+        <result column="reserve01" property="reserve01"/>
+        <result column="reserve02" property="reserve02"/>
+	</resultMap>
+
+	<!-- 公共列 zhaoci 2016-01-03 -->
+	<sql id="columns">
+		id, lable, createDate, is_used, reserve01, reserve02
+	</sql>
+
+	<!-- 公共条件 zhaoci 2016-01-03 -->
+	<sql id="whereSQL">
+		<if test="id != null and id != '' ">
+		AND id = #{id}
+		</if>
+		<if test="lable != null and lable != '' ">
+		AND lable = #{lable}
+		</if>
+		<if test="createDate != null and createDate != '' ">
+		AND createDate = #{createDate}
+		</if>
+		<if test="isUsed != null and isUsed != '' ">
+		AND is_used = #{isUsed}
+		</if>
+		<if test="reserve01 != null and reserve01 != '' ">
+		AND reserve01 = #{reserve01}
+		</if>
+		<if test="reserve02 != null and reserve02 != '' ">
+		AND reserve02 = #{reserve02}
+		</if>
+	</sql>
+
+	<!-- 公共分页条件SQL zhaoci 2016-01-03 -->
+	<sql id="wherePageSql">
+		<if test="params.id != null and params.id != '' ">
+		AND id = #{params.id}
+		</if>
+		<if test="params.lable != null and params.lable != '' ">
+		AND lable = #{params.lable}
+		</if>
+		<if test="params.createDate != null and params.createDate != '' ">
+		AND createDate = #{params.createDate}
+		</if>
+		<if test="params.isUsed != null and params.isUsed != '' ">
+		AND is_used = #{params.isUsed}
+		</if>
+		<if test="params.reserve01 != null and params.reserve01 != '' ">
+		AND reserve01 = #{params.reserve01}
+		</if>
+		<if test="params.reserve02 != null and params.reserve02 != '' ">
+		AND reserve02 = #{params.reserve02}
+		</if>
+	</sql>
+
+	<!-- 根据主键ID查询 zhaoci 2016-01-03 -->
+	<select id="queryById" resultMap="resultMap">
+		SELECT <include refid="columns" />
+		  FROM T_LABLE 
+	     WHERE id = #{id}     
+	</select>
+
+	<!-- 查询列表 zhaoci 2016-01-03 -->
+	<select id="selectList" resultMap="resultMap">
+		SELECT <include refid="columns" />
+		  FROM T_LABLE
+		 WHERE 1 = 1	
+		 <include refid="whereSQL" />
+	</select>
+
+	<!-- 查询分页列表 zhaoci 2016-01-03 -->
+	<select id="queryListPage" resultMap="resultMap">
+		SELECT <include refid="columns" />
+		  FROM T_LABLE
+		 WHERE 1 = 1
+		 <include refid="wherePageSql" />
+	</select>
+
+	<!-- 插入 zhaoci 2016-01-03 -->
+	<insert id="insert" parameterType="com.zhaoci.share.story.lable.po.Lable">
+        INSERT INTO T_LABLE (
+        	id,
+        	lable,
+        	createDate,
+        	is_used,
+        	reserve01,
+        	reserve02
+        ) VALUES (
+        	#{id},
+        	#{lable},
+        	#{createDate},
+        	#{isUsed},
+        	#{reserve01},
+        	#{reserve02}
+        )
+	</insert>
+
+	<!-- 根据主键ID删除 zhaoci 2016-01-03 -->
+	<delete id="delete">
+		DELETE FROM T_LABLE 
+		 WHERE id = #{id} 
+	</delete>
+
+	<!-- 更新 zhaoci 2016-01-03 -->
+	<update id="update" parameterType="com.zhaoci.share.story.lable.po.Lable">
+        UPDATE T_LABLE 
+		SET
+	        lable = #{lable},
+	        createDate = #{createDate},
+	        is_used = #{isUsed},
+	        reserve01 = #{reserve01},
+	        reserve02 = #{reserve02}
+        WHERE id = #{id} 	        
+	</update>
+
+	<update id="batchUpdate">
+		<foreach collection="list" item="item" open="" close="" separator=";">
+			UPDATE T_LABLE
+			<set>
+    	        lable = #{item.lable},
+    	        createDate = #{item.createDate},
+    	        is_used = #{item.isUsed},
+    	        reserve01 = #{item.reserve01},
+    	        reserve02 = #{item.reserve02}
+			</set>
+            WHERE id = #{item.id} 	
+		</foreach>
+	</update>
+</mapper>

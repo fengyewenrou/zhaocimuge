@@ -9,13 +9,16 @@
         <result column="id" property="id"/>
         <result column="name" property="name"/>
         <result column="phone" property="phone"/>
-        <result column="adress" property="adress"/>
+        <result column="address" property="addßress"/>
         <result column="email" property="email"/>
+        <result column="sex" property="sex"/>
+        <result column="age" property="age"/>
+        <result column="synopsis" property="synopsis"/>
 	</resultMap>
 
 	<!-- 公共列  2016-01-03 -->
 	<sql id="columns">
-		id, name, phone, adress, email,sex,age
+		id, name, phone, address, email,sex,age
 	</sql>
 
 	<!-- 公共条件  2016-01-03 -->
@@ -29,8 +32,8 @@
 		<if test="phone != null and phone != '' ">
 		AND phone = #{phone}
 		</if>
-		<if test="adress != null and adress != '' ">
-		AND adress = #{adress}
+		<if test="address != null and address != '' ">
+		AND address = #{address}
 		</if>
 		<if test="email != null and email != '' ">
 		AND email = #{email}
@@ -48,8 +51,8 @@
 		<if test="params.phone != null and params.phone != '' ">
 		AND phone = #{params.phone}
 		</if>
-		<if test="params.adress != null and params.adress != '' ">
-		AND adress = #{params.adress}
+		<if test="params.address != null and params.address != '' ">
+		AND address = #{params.address}
 		</if>
 		<if test="params.email != null and params.email != '' ">
 		AND email = #{params.email}
@@ -90,18 +93,20 @@
         	id,
         	name,
         	phone,
-        	adress,
+        	address,
         	email,
         	sex,
-        	age
+        	age,
+        	synopsis
         ) VALUES (
         	#{id},
         	#{name},
         	#{phone},
-        	#{adress},
+        	#{address},
         	#{email},
         	#{sex},
-        	#{age}
+        	#{age},
+        	#{synopsis}
         )
 	</insert>
 
@@ -117,11 +122,12 @@
 		SET
 	        name = #{name},
 	        phone = #{phone},
-	        adress = #{adress},
+	        address = #{address},
 	        email = #{email},
 	        sex = #{sex},
-	        age = #{age}
-        WHERE id = #{id} 	        
+	        age = #{age},
+	        synopsis = #{synopsis}
+        WHERE id = #{id}
 	</update>
 
 	<update id="batchUpdate">
@@ -130,7 +136,7 @@
 			<set>
     	        name = #{item.name},
     	        phone = #{item.phone},
-    	        adress = #{item.adress},
+    	        address = #{item.address},
     	        email = #{item.email},
 				sex = #{item.sex},
 				age = #{item.age}

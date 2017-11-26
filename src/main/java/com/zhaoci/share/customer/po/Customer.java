@@ -15,12 +15,21 @@ public class Customer implements Serializable {
 	private String phone;
 
 	/**  */
-	private String adress;
+	private String address;
 
 	/**  */
 	private String email;
 	private  Integer sex;
 	private  Integer age;
+	private String synopsis;
+
+	public String getSynopsis() {
+		return synopsis;
+	}
+
+	public void setSynopsis(String synopsis) {
+		this.synopsis = synopsis;
+	}
 
 	public Integer getSex() {
 		return sex;
@@ -62,12 +71,12 @@ public class Customer implements Serializable {
 		return this.phone;
 	}
 
-	public void setAdress(String adress) {
-		this.adress = adress;
+	public void setAddress(String adress) {
+		this.address = adress;
 	}
 	
-	public String getAdress() {
-		return this.adress;
+	public String getAddress() {
+		return this.address;
 	}
 
 	public void setEmail(String email) {
