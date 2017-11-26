@@ -31,40 +31,47 @@ public class TaleController extends BaseController {
     private TaleService taleService;
     @Resource
     private LableService lableService;
+
     /**
      * 首页故事列表 根据创建时间、点击、评论倒序
+     *
      * @param request
      * @param response
      * @return
      */
-    @RequestMapping(value = "taleList",produces = "application/json;charset=utf-8")
+    @RequestMapping(value = "taleList", produces = "application/json;charset=utf-8")
     @ResponseBody
-    public String taleList(HttpServletRequest request,HttpServletResponse response){
-        String message=null;
-        Page<Tale> page = new Page<>();
-        PageHelper.initPage(request,page);
-        String pageIndex = request.getParameter("pageIndex");//页码
-        String pageSize = request.getParameter("pageSize");//每页多少
-        String customerId = request.getParameter("customerId");//用户ID
-        if(pageSize!=null){
-            page.setPageSize(Integer.parseInt(pageSize));
+    public String taleList(HttpServletRequest request, HttpServletResponse response) {
+        String message = null;
+        try {
+            Page<Tale> page = new Page<>();
+            PageHelper.initPage(request, page);
+            String pageIndex = request.getParameter("pageIndex");//页码
+            String pageSize = request.getParameter("pageSize");//每页多少
+            String customerId = request.getParameter("customerId");//用户ID
+            if (pageSize != null) {
+                page.setPageSize(Integer.parseInt(pageSize));
+            }
+            if (pageIndex != null) {
+                page.setCurrentPage(Integer.parseInt(pageIndex));
+            }
+            page = taleService.queryListPage(page);
+            message = ZhaoCiMessageType.toZhaociJson("0", "success", "data", page.getResultList());
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
         }
-        if(pageIndex!=null){
-            page.setCurrentPage(Integer.parseInt(pageIndex));
-        }
-         page=  taleService.queryListPage(page);
-        message = ZhaoCiMessageType.toZhaociJson("0","success","data",page.getResultList());
         return message;
     }
-    @RequestMapping(value = "lableList",produces = "application/json;charset=utf-8")
+
+    @RequestMapping(value = "lableList", produces = "application/json;charset=utf-8")
     @ResponseBody
-    public String lableList(HttpServletRequest request,HttpServletResponse response){
-        String message=null;
+    public String lableList(HttpServletRequest request, HttpServletResponse response) {
+        String message = null;
         Page<Tale> page = new Page<>();
-        PageHelper.initPage(request,page);
+        PageHelper.initPage(request, page);
         String customerId = request.getParameter("customerId");//用户ID
-        List<Lable> list=  lableService.selectList(null);
-        message = ZhaoCiMessageType.toZhaociJson("0","success","data",list);
+        List<Lable> list = lableService.selectList(null);
+        message = ZhaoCiMessageType.toZhaociJson("0", "success", "data", list);
         return message;
     }
 }

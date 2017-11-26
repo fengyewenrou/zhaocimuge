@@ -301,7 +301,7 @@
 				<db-maxWait>60000</db-maxWait>
 				<yimei-uri>http://sdk999ws.eucp.b2m.cn:8080/sdk/SDKService?wsdl</yimei-uri>
 				<yimei-serialNo>9SDK-EMY-0999-JFSTT</yimei-serialNo>
-				<yimei-key>boxiang2015</yimei-key>
+				<yimei-key>zhaoci2015</yimei-key>
 				<uploadImageType>1</uploadImageType>
 				<uploadImagePath>/uploadFiles/images/</uploadImagePath>
 			</properties>

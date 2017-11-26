@@ -4,7 +4,7 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zhaoci.share.story.dao.TaleLableDao">
 	
-	<!-- 列结果resultMap boxiang 2016-01-03 -->
+	<!-- 列结果resultMap zhaoci 2016-01-03 -->
 	<resultMap id="resultMap" type="com.zhaoci.share.story.po.TaleLable">
         <result column="id" property="id"/>
         <result column="tale_id" property="taleId"/>
@@ -14,12 +14,12 @@
         <result column="updateDate" property="updateDate"/>
 	</resultMap>
 
-	<!-- 公共列 boxiang 2016-01-03 -->
+	<!-- 公共列 zhaoci 2016-01-03 -->
 	<sql id="columns">
 		id, tale_id, lable_id, is_used, createDate, updateDate
 	</sql>
 
-	<!-- 公共条件 boxiang 2016-01-03 -->
+	<!-- 公共条件 zhaoci 2016-01-03 -->
 	<sql id="whereSQL">
 		<if test="id != null and id != '' ">
 		AND id = #{id}
@@ -41,7 +41,7 @@
 		</if>
 	</sql>
 
-	<!-- 公共分页条件SQL boxiang 2016-01-03 -->
+	<!-- 公共分页条件SQL zhaoci 2016-01-03 -->
 	<sql id="wherePageSql">
 		<if test="params.id != null and params.id != '' ">
 		AND id = #{params.id}
@@ -63,14 +63,14 @@
 		</if>
 	</sql>
 
-	<!-- 根据主键ID查询 boxiang 2016-01-03 -->
+	<!-- 根据主键ID查询 zhaoci 2016-01-03 -->
 	<select id="queryById" resultMap="resultMap">
 		SELECT <include refid="columns" />
 		  FROM T_TALE_LABLE 
 	     WHERE id = #{id}     
 	</select>
 
-	<!-- 查询列表 boxiang 2016-01-03 -->
+	<!-- 查询列表 zhaoci 2016-01-03 -->
 	<select id="selectList" resultMap="resultMap">
 		SELECT <include refid="columns" />
 		  FROM T_TALE_LABLE
@@ -78,7 +78,7 @@
 		 <include refid="whereSQL" />
 	</select>
 
-	<!-- 查询分页列表 boxiang 2016-01-03 -->
+	<!-- 查询分页列表 zhaoci 2016-01-03 -->
 	<select id="queryListPage" resultMap="resultMap">
 		SELECT <include refid="columns" />
 		  FROM T_TALE_LABLE
@@ -86,7 +86,7 @@
 		 <include refid="wherePageSql" />
 	</select>
 
-	<!-- 插入 boxiang 2016-01-03 -->
+	<!-- 插入 zhaoci 2016-01-03 -->
 	<insert id="insert" parameterType="com.zhaoci.share.story.po.TaleLable">
         INSERT INTO T_TALE_LABLE (
         	id,
@@ -105,13 +105,13 @@
         )
 	</insert>
 
-	<!-- 根据主键ID删除 boxiang 2016-01-03 -->
+	<!-- 根据主键ID删除 zhaoci 2016-01-03 -->
 	<delete id="delete">
 		DELETE FROM T_TALE_LABLE 
 		 WHERE id = #{id} 
 	</delete>
 
-	<!-- 更新 boxiang 2016-01-03 -->
+	<!-- 更新 zhaoci 2016-01-03 -->
 	<update id="update" parameterType="com.zhaoci.share.story.po.TaleLable">
         UPDATE T_TALE_LABLE 
 		SET
