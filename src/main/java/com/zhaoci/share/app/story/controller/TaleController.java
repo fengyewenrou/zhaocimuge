@@ -6,11 +6,14 @@ import com.zhaoci.framework.base.page.PageHelper;
 import com.zhaoci.share.customer.service.CustomerService;
 import com.zhaoci.share.story.lable.po.Lable;
 import com.zhaoci.share.story.lable.service.LableService;
+import com.zhaoci.share.story.po.Comment;
+import com.zhaoci.share.story.service.CommentService;
 import com.zhaoci.share.story.tale.po.Tale;
 import com.zhaoci.share.story.tale.service.TaleService;
 import com.zhaoci.share.utils.ZhaoCiMessageType;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -31,6 +34,8 @@ public class TaleController extends BaseController {
     private TaleService taleService;
     @Resource
     private LableService lableService;
+    @Resource
+    private CommentService commentService;
 
     /**
      * 首页故事列表 根据创建时间、点击、评论倒序
@@ -55,7 +60,7 @@ public class TaleController extends BaseController {
             if (pageIndex != null) {
                 page.setCurrentPage(Integer.parseInt(pageIndex));
             }
-            page = taleService.queryListPage(page);
+            page = taleService.queryListPage2(page);
             message = ZhaoCiMessageType.toZhaociJson("0", "success", "data", page.getResultList());
         } catch (NumberFormatException e) {
             e.printStackTrace();
@@ -63,6 +68,12 @@ public class TaleController extends BaseController {
         return message;
     }
 
+    /**
+     * 标签列表
+     * @param request
+     * @param response
+     * @return
+     */
     @RequestMapping(value = "lableList", produces = "application/json;charset=utf-8")
     @ResponseBody
     public String lableList(HttpServletRequest request, HttpServletResponse response) {
@@ -72,6 +83,39 @@ public class TaleController extends BaseController {
         String customerId = request.getParameter("customerId");//用户ID
         List<Lable> list = lableService.selectList(null);
         message = ZhaoCiMessageType.toZhaociJson("0", "success", "data", list);
+        return message;
+    }
+
+    /**
+     * 增加故事
+     * @param request
+     * @param response
+     * @param tale
+     * @return
+     */
+    @RequestMapping(value = "insertTale", produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String insertTale(HttpServletRequest request, HttpServletResponse response, @ModelAttribute Tale tale) {
+        String message = null;
+        taleService.insertTale(tale);
+        message = ZhaoCiMessageType.toZhaociJson("0", "success", "data", tale);
+        return message;
+    }
+
+    /**
+     * 增加评论
+     * @param request
+     * @param response
+     * @param comment
+     * @return
+     */
+    @RequestMapping(value = "insertComment", produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String insertComment(HttpServletRequest request, HttpServletResponse response, @ModelAttribute Comment comment) {
+        String message = null;
+        commentService.add(comment);
+       Tale tale = taleService.queryById(comment.getTaleId());
+        message = ZhaoCiMessageType.toZhaociJson("0", "success", "data", tale);
         return message;
     }
 }

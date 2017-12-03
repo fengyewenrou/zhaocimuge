@@ -10,7 +10,9 @@ public interface TaleService {
 	List<Tale> selectList(Tale tale);
 	
 	Page<Tale> queryListPage(Page<Tale> page);
-	
+	Page<Tale> queryListPage2(Page<Tale> page);
+
+
 	Tale queryById(Integer id);
 	
 	void add(Tale tale);
@@ -18,6 +20,6 @@ public interface TaleService {
 	void delete(Integer id);
 	
 	void update(Tale tale);
-	
+	void insertTale(Tale tale);
 	void batchUpdate(List<Tale> taleList);
 }

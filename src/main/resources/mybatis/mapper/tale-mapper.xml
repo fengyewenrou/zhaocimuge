@@ -22,6 +22,7 @@
         <result column="reserve03" property="reserve03"/>
         <result column="reserve04" property="reserve04"/>
         <result column="reserve05" property="reserve05"/>
+        <result column="commentCount" property="commentCount"/>
 	</resultMap>
 
 	<!-- 公共列 zhaoci 2016-01-03 -->
@@ -155,7 +156,13 @@
 		 WHERE 1 = 1
 		 <include refid="wherePageSql" />
 	</select>
-
+	<select id="queryListPage2" resultMap="resultMap">
+		SELECT <include refid="columns" />,
+		(SELECT COUNT(id) from `comment`  where comment.taleId = tale.id) commentCount
+		FROM TALE
+		WHERE 1 = 1
+		<include refid="wherePageSql" />
+	</select>
 	<!-- 插入 zhaoci 2016-01-03 -->
 	<insert id="insert" parameterType="com.zhaoci.share.story.tale.po.Tale">
         INSERT INTO TALE (
