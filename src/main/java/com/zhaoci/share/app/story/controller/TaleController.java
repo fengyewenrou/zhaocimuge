@@ -14,6 +14,7 @@ import com.zhaoci.share.story.service.StoryTypeService;
 import com.zhaoci.share.story.tale.po.Tale;
 import com.zhaoci.share.story.tale.service.TaleService;
 import com.zhaoci.share.utils.ZhaoCiMessageType;
+import org.apache.commons.codec.binary.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -68,6 +69,32 @@ public class TaleController extends BaseController {
             if (pageIndex != null) {
                 page.setCurrentPage(Integer.parseInt(pageIndex));
             }
+            page = taleService.queryListPage2(page);
+            message = ZhaoCiMessageType.toZhaociJson("0", "success", "data", page.getResultList());
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+        return message;
+    }
+    @RequestMapping(value = "taleListLike", produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String taleListLike(HttpServletRequest request, HttpServletResponse response) {
+        String message = null;
+        try {
+            Page<Tale> page = new Page<>();
+            PageHelper.initPage(request, page);
+            String pageIndex = request.getParameter("pageIndex");//页码
+            String pageSize = request.getParameter("pageSize");//每页多少
+            String customerId = request.getParameter("customerId");//用户ID
+            String type = request.getParameter("type");//类型
+            if (pageSize != null) {
+                page.setPageSize(Integer.parseInt(pageSize));
+            }
+            if (pageIndex != null) {
+                page.setCurrentPage(Integer.parseInt(pageIndex));
+            }
+            page.getParams().put("customerId",customerId);
+            page.getParams().put("type",type);
             page = taleService.queryListPage2(page);
             message = ZhaoCiMessageType.toZhaociJson("0", "success", "data", page.getResultList());
         } catch (NumberFormatException e) {

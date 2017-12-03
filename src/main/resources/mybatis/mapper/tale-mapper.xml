@@ -197,6 +197,7 @@
         <include refid="wherePageSql"/>
         order by collectionCount desc, likeCount desc,commentCount desc
     </select>
+
     <!-- 插入 zhaoci 2016-01-03 -->
     <insert id="insert" parameterType="com.zhaoci.share.story.tale.po.Tale">
         INSERT INTO TALE (
