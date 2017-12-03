@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
-    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zhaoci.share.story.tale.dao.TaleDao">
-	
-	<!-- 列结果resultMap zhaoci 2016-01-03 -->
-	<resultMap id="resultMap" type="com.zhaoci.share.story.tale.po.Tale">
+
+    <!-- 列结果resultMap zhaoci 2016-01-03 -->
+    <resultMap id="resultMap" type="com.zhaoci.share.story.tale.po.Tale">
         <result column="id" property="id"/>
         <result column="title" property="title"/>
         <result column="label" property="label"/>
@@ -23,234 +23,268 @@
         <result column="reserve04" property="reserve04"/>
         <result column="reserve05" property="reserve05"/>
         <result column="commentCount" property="commentCount"/>
-	</resultMap>
+        <result column="collectionCount" property="collectionCount"/>
+        <result column="likeCount" property="likeCount"/>
+    </resultMap>
 
-	<!-- 公共列 zhaoci 2016-01-03 -->
-	<sql id="columns">
-		id, title, label, content, image, createDate, updateDate, writer, assortment, remarks, customerId, reserve01, reserve02, reserve03, reserve04, reserve05
-	</sql>
+    <!-- 公共列 zhaoci 2016-01-03 -->
+    <sql id="columns">
+        id, title, label, content, image, createDate, updateDate, writer, assortment, remarks, customerId, reserve01,
+        reserve02, reserve03, reserve04, reserve05
+    </sql>
 
-	<!-- 公共条件 zhaoci 2016-01-03 -->
-	<sql id="whereSQL">
-		<if test="id != null and id != '' ">
-		AND id = #{id}
-		</if>
-		<if test="title != null and title != '' ">
-		AND title = #{title}
-		</if>
-		<if test="label != null and label != '' ">
-		AND label = #{label}
-		</if>
-		<if test="content != null and content != '' ">
-		AND content = #{content}
-		</if>
-		<if test="image != null and image != '' ">
-		AND image = #{image}
-		</if>
-		<if test="createDate != null and createDate != '' ">
-		AND createDate = #{createDate}
-		</if>
-		<if test="updateDate != null and updateDate != '' ">
-		AND updateDate = #{updateDate}
-		</if>
-		<if test="writer != null and writer != '' ">
-		AND writer = #{writer}
-		</if>
-		<if test="assortment != null and assortment != '' ">
-		AND assortment = #{assortment}
-		</if>
-		<if test="remarks != null and remarks != '' ">
-		AND remarks = #{remarks}
-		</if>
-		<if test="customerId != null and customerId != '' ">
-		AND customerId = #{customerId}
-		</if>
-		<if test="reserve01 != null and reserve01 != '' ">
-		AND reserve01 = #{reserve01}
-		</if>
-		<if test="reserve02 != null and reserve02 != '' ">
-		AND reserve02 = #{reserve02}
-		</if>
-		<if test="reserve03 != null and reserve03 != '' ">
-		AND reserve03 = #{reserve03}
-		</if>
-		<if test="reserve04 != null and reserve04 != '' ">
-		AND reserve04 = #{reserve04}
-		</if>
-		<if test="reserve05 != null and reserve05 != '' ">
-		AND reserve05 = #{reserve05}
-		</if>
-	</sql>
+    <!-- 公共条件 zhaoci 2016-01-03 -->
+    <sql id="whereSQL">
+        <if test="id != null and id != '' ">
+            AND id = #{id}
+        </if>
+        <if test="title != null and title != '' ">
+            AND title = #{title}
+        </if>
+        <if test="label != null and label != '' ">
+            AND label = #{label}
+        </if>
+        <if test="content != null and content != '' ">
+            AND content = #{content}
+        </if>
+        <if test="image != null and image != '' ">
+            AND image = #{image}
+        </if>
+        <if test="createDate != null and createDate != '' ">
+            AND createDate = #{createDate}
+        </if>
+        <if test="updateDate != null and updateDate != '' ">
+            AND updateDate = #{updateDate}
+        </if>
+        <if test="writer != null and writer != '' ">
+            AND writer = #{writer}
+        </if>
+        <if test="assortment != null and assortment != '' ">
+            AND assortment = #{assortment}
+        </if>
+        <if test="remarks != null and remarks != '' ">
+            AND remarks = #{remarks}
+        </if>
+        <if test="customerId != null and customerId != '' ">
+            AND customerId = #{customerId}
+        </if>
+        <if test="reserve01 != null and reserve01 != '' ">
+            AND reserve01 = #{reserve01}
+        </if>
+        <if test="reserve02 != null and reserve02 != '' ">
+            AND reserve02 = #{reserve02}
+        </if>
+        <if test="reserve03 != null and reserve03 != '' ">
+            AND reserve03 = #{reserve03}
+        </if>
+        <if test="reserve04 != null and reserve04 != '' ">
+            AND reserve04 = #{reserve04}
+        </if>
+        <if test="reserve05 != null and reserve05 != '' ">
+            AND reserve05 = #{reserve05}
+        </if>
+    </sql>
 
-	<!-- 公共分页条件SQL zhaoci 2016-01-03 -->
-	<sql id="wherePageSql">
-		<if test="params.id != null and params.id != '' ">
-		AND id = #{params.id}
-		</if>
-		<if test="params.title != null and params.title != '' ">
-		AND title = #{params.title}
-		</if>
-		<if test="params.label != null and params.label != '' ">
-		AND label = #{params.label}
-		</if>
-		<if test="params.content != null and params.content != '' ">
-		AND content = #{params.content}
-		</if>
-		<if test="params.image != null and params.image != '' ">
-		AND image = #{params.image}
-		</if>
-		<if test="params.createDate != null and params.createDate != '' ">
-		AND createDate = #{params.createDate}
-		</if>
-		<if test="params.updateDate != null and params.updateDate != '' ">
-		AND updateDate = #{params.updateDate}
-		</if>
-		<if test="params.writer != null and params.writer != '' ">
-		AND writer = #{params.writer}
-		</if>
-		<if test="params.assortment != null and params.assortment != '' ">
-		AND assortment = #{params.assortment}
-		</if>
-		<if test="params.remarks != null and params.remarks != '' ">
-		AND remarks = #{params.remarks}
-		</if>
-		<if test="params.customerId != null and params.customerId != '' ">
-		AND customerId = #{params.customerId}
-		</if>
-		<if test="params.reserve01 != null and params.reserve01 != '' ">
-		AND reserve01 = #{params.reserve01}
-		</if>
-		<if test="params.reserve02 != null and params.reserve02 != '' ">
-		AND reserve02 = #{params.reserve02}
-		</if>
-		<if test="params.reserve03 != null and params.reserve03 != '' ">
-		AND reserve03 = #{params.reserve03}
-		</if>
-		<if test="params.reserve04 != null and params.reserve04 != '' ">
-		AND reserve04 = #{params.reserve04}
-		</if>
-		<if test="params.reserve05 != null and params.reserve05 != '' ">
-		AND reserve05 = #{params.reserve05}
-		</if>
-	</sql>
+    <!-- 公共分页条件SQL zhaoci 2016-01-03 -->
+    <sql id="wherePageSql">
+        <if test="params.id != null and params.id != '' ">
+            AND id = #{params.id}
+        </if>
+        <if test="params.title != null and params.title != '' ">
+            AND title = #{params.title}
+        </if>
+        <if test="params.label != null and params.label != '' ">
+            AND label = #{params.label}
+        </if>
+        <if test="params.content != null and params.content != '' ">
+            AND content = #{params.content}
+        </if>
+        <if test="params.image != null and params.image != '' ">
+            AND image = #{params.image}
+        </if>
+        <if test="params.createDate != null and params.createDate != '' ">
+            AND createDate = #{params.createDate}
+        </if>
+        <if test="params.updateDate != null and params.updateDate != '' ">
+            AND updateDate = #{params.updateDate}
+        </if>
+        <if test="params.writer != null and params.writer != '' ">
+            AND writer = #{params.writer}
+        </if>
+        <if test="params.assortment != null and params.assortment != '' ">
+            AND assortment = #{params.assortment}
+        </if>
+        <if test="params.remarks != null and params.remarks != '' ">
+            AND remarks = #{params.remarks}
+        </if>
+        <if test="params.customerId != null and params.customerId != '' ">
+            AND customerId = #{params.customerId}
+        </if>
+        <if test="params.reserve01 != null and params.reserve01 != '' ">
+            AND reserve01 = #{params.reserve01}
+        </if>
+        <if test="params.reserve02 != null and params.reserve02 != '' ">
+            AND reserve02 = #{params.reserve02}
+        </if>
+        <if test="params.reserve03 != null and params.reserve03 != '' ">
+            AND reserve03 = #{params.reserve03}
+        </if>
+        <if test="params.reserve04 != null and params.reserve04 != '' ">
+            AND reserve04 = #{params.reserve04}
+        </if>
+        <if test="params.reserve05 != null and params.reserve05 != '' ">
+            AND reserve05 = #{params.reserve05}
+        </if>
+    </sql>
 
-	<!-- 根据主键ID查询 zhaoci 2016-01-03 -->
-	<select id="queryById" resultMap="resultMap">
-		SELECT <include refid="columns" />
-		  FROM TALE 
-	     WHERE id = #{id}     
-	</select>
+    <!-- 根据主键ID查询 zhaoci 2016-01-03 -->
+    <select id="queryById2" resultType="java.util.HashMap">
+        SELECT
+        t.id,
+        t.title,
+        t.label,
+        t.content,
+        IFNULL(t.image,'') image,
+        IFNULL(t.createDate ,'')taleCreateDate,
+        IFNULL(t.assortment ,'') assortment,
+        IFNULL(t.remarks ,'') remarks,
+        IFNULL(c.comment ,'') comment,
+        IFNULL(c.createDate ,'') commentCreateDate,
+        IFNULL(co.synopsis,'') coSynopsis,
+        IFNULL(co.name ,'') coName,
+        IFNULL(co.image ,'') coImage,
+        IFNULL(cor.synopsis ,'') synopsis,
+        IFNULL(cor.name ,'') name,
+        IFNULL(cor.image ,'') corImage
 
-	<!-- 查询列表 zhaoci 2016-01-03 -->
-	<select id="selectList" resultMap="resultMap">
-		SELECT <include refid="columns" />
-		  FROM TALE
-		 WHERE 1 = 1	
-		 <include refid="whereSQL" />
-	</select>
+        FROM TALE t left join comment c on t.id = c.taleId
+        left join customer cor on t.customerId = cor.id
+        left join customer co on c.customerId = co.id
+        WHERE t.id = #{id}
+    </select>
+    <select id="queryById" resultMap="resultMap">
+        SELECT
+        <include refid="columns"/>
+        FROM TALE
+        WHERE id = #{id}
+    </select>
+    <!-- 查询列表 zhaoci 2016-01-03 -->
+    <select id="selectList" resultMap="resultMap">
+        SELECT
+        <include refid="columns"/>
+        FROM TALE
+        WHERE 1 = 1
+        <include refid="whereSQL"/>
+    </select>
 
-	<!-- 查询分页列表 zhaoci 2016-01-03 -->
-	<select id="queryListPage" resultMap="resultMap">
-		SELECT <include refid="columns" />
-		  FROM TALE
-		 WHERE 1 = 1
-		 <include refid="wherePageSql" />
-	</select>
-	<select id="queryListPage2" resultMap="resultMap">
-		SELECT <include refid="columns" />,
-		(SELECT COUNT(id) from `comment`  where comment.taleId = tale.id) commentCount
-		FROM TALE
-		WHERE 1 = 1
-		<include refid="wherePageSql" />
-	</select>
-	<!-- 插入 zhaoci 2016-01-03 -->
-	<insert id="insert" parameterType="com.zhaoci.share.story.tale.po.Tale">
+    <!-- 查询分页列表 zhaoci 2016-01-03 -->
+    <select id="queryListPage" resultMap="resultMap">
+        SELECT
+        <include refid="columns"/>
+        FROM TALE
+        WHERE 1 = 1
+        <include refid="wherePageSql"/>
+    </select>
+    <select id="queryListPage2" resultMap="resultMap">
+        SELECT<include refid="columns"/>,
+        (SELECT COUNT(id) from `comment` where comment.taleId = tale.id) commentCount,
+        (SELECT COUNT(id) from t_customer_collection where t_customer_collection.tale_id = tale.id and
+        t_customer_collection.type = '1' ) collectionCount,
+        (SELECT COUNT(id) from t_customer_collection where t_customer_collection.tale_id = tale.id and
+        t_customer_collection.type = '2' ) likeCount
+        FROM TALE
+        WHERE 1 = 1
+        <include refid="wherePageSql"/>
+        order by collectionCount desc, likeCount desc,commentCount desc
+    </select>
+    <!-- 插入 zhaoci 2016-01-03 -->
+    <insert id="insert" parameterType="com.zhaoci.share.story.tale.po.Tale">
         INSERT INTO TALE (
-        	id,
-        	title,
-        	label,
-        	content,
-        	image,
-        	createDate,
-        	updateDate,
-        	writer,
-        	assortment,
-        	remarks,
-        	customerId,
-        	reserve01,
-        	reserve02,
-        	reserve03,
-        	reserve04,
-        	reserve05
+        id,
+        title,
+        label,
+        content,
+        image,
+        createDate,
+        updateDate,
+        writer,
+        assortment,
+        remarks,
+        customerId,
+        reserve01,
+        reserve02,
+        reserve03,
+        reserve04,
+        reserve05
         ) VALUES (
-        	#{id},
-        	#{title},
-        	#{label},
-        	#{content},
-        	#{image},
-        	#{createDate},
-        	#{updateDate},
-        	#{writer},
-        	#{assortment},
-        	#{remarks},
-        	#{customerId},
-        	#{reserve01},
-        	#{reserve02},
-        	#{reserve03},
-        	#{reserve04},
-        	#{reserve05}
+        #{id},
+        #{title},
+        #{label},
+        #{content},
+        #{image},
+        #{createDate},
+        #{updateDate},
+        #{writer},
+        #{assortment},
+        #{remarks},
+        #{customerId},
+        #{reserve01},
+        #{reserve02},
+        #{reserve03},
+        #{reserve04},
+        #{reserve05}
         )
-	</insert>
+    </insert>
 
-	<!-- 根据主键ID删除 zhaoci 2016-01-03 -->
-	<delete id="delete">
-		DELETE FROM TALE 
-		 WHERE id = #{id} 
-	</delete>
+    <!-- 根据主键ID删除 zhaoci 2016-01-03 -->
+    <delete id="delete">
+        DELETE FROM TALE
+        WHERE id = #{id}
+    </delete>
 
-	<!-- 更新 zhaoci 2016-01-03 -->
-	<update id="update" parameterType="com.zhaoci.share.story.tale.po.Tale">
-        UPDATE TALE 
-		SET
-	        title = #{title},
-	        label = #{label},
-	        content = #{content},
-	        image = #{image},
-	        createDate = #{createDate},
-	        updateDate = #{updateDate},
-	        writer = #{writer},
-	        assortment = #{assortment},
-	        remarks = #{remarks},
-	        customerId = #{customerId},
-	        reserve01 = #{reserve01},
-	        reserve02 = #{reserve02},
-	        reserve03 = #{reserve03},
-	        reserve04 = #{reserve04},
-	        reserve05 = #{reserve05}
-        WHERE id = #{id} 	        
-	</update>
+    <!-- 更新 zhaoci 2016-01-03 -->
+    <update id="update" parameterType="com.zhaoci.share.story.tale.po.Tale">
+        UPDATE TALE
+        SET
+        title = #{title},
+        label = #{label},
+        content = #{content},
+        image = #{image},
+        createDate = #{createDate},
+        updateDate = #{updateDate},
+        writer = #{writer},
+        assortment = #{assortment},
+        remarks = #{remarks},
+        customerId = #{customerId},
+        reserve01 = #{reserve01},
+        reserve02 = #{reserve02},
+        reserve03 = #{reserve03},
+        reserve04 = #{reserve04},
+        reserve05 = #{reserve05}
+        WHERE id = #{id}
+    </update>
 
-	<update id="batchUpdate">
-		<foreach collection="list" item="item" open="" close="" separator=";">
-			UPDATE TALE
-			<set>
-    	        title = #{item.title},
-    	        label = #{item.label},
-    	        content = #{item.content},
-    	        image = #{item.image},
-    	        createDate = #{item.createDate},
-    	        updateDate = #{item.updateDate},
-    	        writer = #{item.writer},
-    	        assortment = #{item.assortment},
-    	        remarks = #{item.remarks},
-    	        customerId = #{item.customerId},
-    	        reserve01 = #{item.reserve01},
-    	        reserve02 = #{item.reserve02},
-    	        reserve03 = #{item.reserve03},
-    	        reserve04 = #{item.reserve04},
-    	        reserve05 = #{item.reserve05}
-			</set>
-            WHERE id = #{item.id} 	
-		</foreach>
-	</update>
+    <update id="batchUpdate">
+        <foreach collection="list" item="item" open="" close="" separator=";">
+            UPDATE TALE
+            <set>
+                title = #{item.title},
+                label = #{item.label},
+                content = #{item.content},
+                image = #{item.image},
+                createDate = #{item.createDate},
+                updateDate = #{item.updateDate},
+                writer = #{item.writer},
+                assortment = #{item.assortment},
+                remarks = #{item.remarks},
+                customerId = #{item.customerId},
+                reserve01 = #{item.reserve01},
+                reserve02 = #{item.reserve02},
+                reserve03 = #{item.reserve03},
+                reserve04 = #{item.reserve04},
+                reserve05 = #{item.reserve05}
+            </set>
+            WHERE id = #{item.id}
+        </foreach>
+    </update>
 </mapper>

@@ -43,4 +43,8 @@
 		<property name="mapperInterface" value="com.zhaoci.share.story.dao.TaleTypeDao"/>
 		<property name="sqlSessionFactory" ref="sqlSessionFactory"/>
 	</bean>
+	<bean id="customerCollectionDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.zhaoci.share.story.dao.CustomerCollectionDao"/>
+		<property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+	</bean>
 </beans>

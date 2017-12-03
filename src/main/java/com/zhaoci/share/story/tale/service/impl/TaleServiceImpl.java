@@ -1,6 +1,8 @@
 package com.zhaoci.share.story.tale.service.impl;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 import javax.annotation.Resource;
 
@@ -52,7 +54,12 @@ public class TaleServiceImpl implements TaleService {
 	public Tale queryById(Integer id) {
 		return taleDao.queryById(id);
 	}
-	
+
+	@Override
+	public Map<String, Object> queryById2(Integer id) {
+		return taleDao.queryById2(id);
+	}
+
 	@Override
 	@Transactional(propagation=Propagation.REQUIRED,rollbackFor={RuntimeException.class, Exception.class})
 	public void add(Tale tale) {

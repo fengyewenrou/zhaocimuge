@@ -1,5 +1,6 @@
 package com.zhaoci.share.app.story.controller;
 
+import com.zhaoci.framework.base.Constants;
 import com.zhaoci.framework.base.controller.BaseController;
 import com.zhaoci.framework.base.page.Page;
 import com.zhaoci.framework.base.page.PageHelper;
@@ -7,13 +8,16 @@ import com.zhaoci.share.customer.service.CustomerService;
 import com.zhaoci.share.story.lable.po.Lable;
 import com.zhaoci.share.story.lable.service.LableService;
 import com.zhaoci.share.story.po.Comment;
+import com.zhaoci.share.story.po.StoryType;
 import com.zhaoci.share.story.service.CommentService;
+import com.zhaoci.share.story.service.StoryTypeService;
 import com.zhaoci.share.story.tale.po.Tale;
 import com.zhaoci.share.story.tale.service.TaleService;
 import com.zhaoci.share.utils.ZhaoCiMessageType;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -22,6 +26,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * Created by zhaoge on 2017/11/26.
@@ -36,6 +42,8 @@ public class TaleController extends BaseController {
     private LableService lableService;
     @Resource
     private CommentService commentService;
+    @Resource
+    private StoryTypeService storyTypeService;
 
     /**
      * 首页故事列表 根据创建时间、点击、评论倒序
@@ -70,6 +78,7 @@ public class TaleController extends BaseController {
 
     /**
      * 标签列表
+     *
      * @param request
      * @param response
      * @return
@@ -81,13 +90,35 @@ public class TaleController extends BaseController {
         Page<Tale> page = new Page<>();
         PageHelper.initPage(request, page);
         String customerId = request.getParameter("customerId");//用户ID
-        List<Lable> list = lableService.selectList(null);
+        Lable lable = new Lable();
+        lable.setIsUsed(Constants.TRUE);
+        List<Lable> list = lableService.selectList(lable);
         message = ZhaoCiMessageType.toZhaociJson("0", "success", "data", list);
         return message;
     }
-
+    /**
+     * 类型列表
+     *
+     * @param request
+     * @param response
+     * @return
+     */
+    @RequestMapping(value = "typeList", produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String typeList(HttpServletRequest request, HttpServletResponse response) {
+        String message = null;
+        Page<StoryType> page = new Page<>();
+        PageHelper.initPage(request, page);
+        String customerId = request.getParameter("customerId");//用户ID
+        StoryType storyType = new StoryType();
+        storyType.setIsUsed(Constants.TRUE);
+        List<StoryType> list = storyTypeService.selectList(storyType);
+        message = ZhaoCiMessageType.toZhaociJson("0", "success", "data", list);
+        return message;
+    }
     /**
      * 增加故事
+     *
      * @param request
      * @param response
      * @param tale
@@ -104,6 +135,7 @@ public class TaleController extends BaseController {
 
     /**
      * 增加评论
+     *
      * @param request
      * @param response
      * @param comment
@@ -114,8 +146,46 @@ public class TaleController extends BaseController {
     public String insertComment(HttpServletRequest request, HttpServletResponse response, @ModelAttribute Comment comment) {
         String message = null;
         commentService.add(comment);
-       Tale tale = taleService.queryById(comment.getTaleId());
+        Tale tale = taleService.queryById(comment.getTaleId());
         message = ZhaoCiMessageType.toZhaociJson("0", "success", "data", tale);
         return message;
     }
+
+    /**
+     * 评论列表
+     *
+     * @param request
+     * @param response
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "commentList", produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String commentList(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer id) {
+        String message = null;
+        Comment comment = new Comment();
+        comment.setTaleId(id);
+        List<Comment> list = commentService.selectList(comment);
+        message = ZhaoCiMessageType.toZhaociJson("0", "success", "data", list);
+        return message;
+    }
+
+    /**
+     * 单个故事带评论
+     * @param request
+     * @param response
+     * @param
+     * @return
+     */
+    @RequestMapping(value = "queryTale", produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String queryTale(HttpServletRequest request, HttpServletResponse response) {
+        String message = null;
+        String id = request.getParameter("id");
+        Map<String,Object> map= taleService.queryById2(Integer.parseInt(id));
+        message = ZhaoCiMessageType.toZhaociJson("0", "success", "data", map);
+        return message;
+    }
+
+
 }

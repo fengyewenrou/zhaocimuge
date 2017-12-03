@@ -4,6 +4,8 @@ import com.zhaoci.framework.base.page.Page;
 import com.zhaoci.share.story.tale.po.Tale;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 public interface TaleService {
 
@@ -14,6 +16,7 @@ public interface TaleService {
 
 
 	Tale queryById(Integer id);
+	Map<String,Object> queryById2(Integer id);
 	
 	void add(Tale tale);
 

@@ -53,6 +53,24 @@ public class Tale implements Serializable {
 	/**  */
 	private String reserve05;
 	private Integer commentCount;
+	private Integer collectionCount;
+	private Integer likeCount;
+
+	public Integer getCollectionCount() {
+		return collectionCount;
+	}
+
+	public void setCollectionCount(Integer collectionCount) {
+		this.collectionCount = collectionCount;
+	}
+
+	public Integer getLikeCount() {
+		return likeCount;
+	}
+
+	public void setLikeCount(Integer likeCount) {
+		this.likeCount = likeCount;
+	}
 
 	public Integer getCommentCount() {
 		return commentCount;
