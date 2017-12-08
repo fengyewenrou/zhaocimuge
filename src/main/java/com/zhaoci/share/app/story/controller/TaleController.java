@@ -13,6 +13,8 @@ import com.zhaoci.share.story.service.CommentService;
 import com.zhaoci.share.story.service.StoryTypeService;
 import com.zhaoci.share.story.tale.po.Tale;
 import com.zhaoci.share.story.tale.service.TaleService;
+import com.zhaoci.share.user.po.InviteCode;
+import com.zhaoci.share.user.service.InviteCodeService;
 import com.zhaoci.share.utils.DateUtil;
 import com.zhaoci.share.utils.ZhaoCiMessageType;
 import org.apache.commons.codec.binary.StringUtils;
@@ -44,7 +46,8 @@ public class TaleController extends BaseController {
     private CommentService commentService;
     @Resource
     private StoryTypeService storyTypeService;
-
+    @Resource
+    private InviteCodeService inviteCodeService;
     /**
      * 首页故事列表 根据创建时间、点击、评论倒序
      *
@@ -72,6 +75,7 @@ public class TaleController extends BaseController {
             message = ZhaoCiMessageType.toZhaociJson("0", "success", "data", page.getResultList());
         } catch (NumberFormatException e) {
             e.printStackTrace();
+            message = ZhaoCiMessageType.toZhaociJson("1", "fail", "data","");
         }
         return message;
     }
@@ -105,6 +109,7 @@ public class TaleController extends BaseController {
             message = ZhaoCiMessageType.toZhaociJson("0", "success", "data", page.getResultList());
         } catch (NumberFormatException e) {
             e.printStackTrace();
+            message = ZhaoCiMessageType.toZhaociJson("1", "fail", "data","");
         }
         return message;
     }
@@ -120,13 +125,17 @@ public class TaleController extends BaseController {
     @ResponseBody
     public String lableList(HttpServletRequest request, HttpServletResponse response) {
         String message = null;
-        Page<Tale> page = new Page<>();
-        PageHelper.initPage(request, page);
+        try {
         String customerId = request.getParameter("customerId");//用户ID
         Lable lable = new Lable();
         lable.setIsUsed(Constants.TRUE);
         List<Lable> list = lableService.selectList(lable);
         message = ZhaoCiMessageType.toZhaociJson("0", "success", "data", list);
+        }catch (Exception e){
+            e.printStackTrace();
+            message = ZhaoCiMessageType.toZhaociJson("1", "fail", "data","");
+        }
+
         return message;
     }
     /**
@@ -140,13 +149,16 @@ public class TaleController extends BaseController {
     @ResponseBody
     public String typeList(HttpServletRequest request, HttpServletResponse response) {
         String message = null;
-        Page<StoryType> page = new Page<>();
-        PageHelper.initPage(request, page);
         String customerId = request.getParameter("customerId");//用户ID
+        try {
         StoryType storyType = new StoryType();
         storyType.setIsUsed(Constants.TRUE);
         List<StoryType> list = storyTypeService.selectList(storyType);
         message = ZhaoCiMessageType.toZhaociJson("0", "success", "data", list);
+        }catch (Exception e){
+            e.printStackTrace();
+            message = ZhaoCiMessageType.toZhaociJson("1", "fail", "data","");
+        }
         return message;
     }
     /**
@@ -161,8 +173,14 @@ public class TaleController extends BaseController {
     @ResponseBody
     public String insertTale(HttpServletRequest request, HttpServletResponse response, @ModelAttribute Tale tale) {
         String message = null;
-        taleService.insertTale(tale);
-        message = ZhaoCiMessageType.toZhaociJson("0", "success", "data", tale);
+        try {
+            taleService.insertTale(tale);
+            message = ZhaoCiMessageType.toZhaociJson("0", "success", "data", tale);
+        }catch (Exception e){
+            e.printStackTrace();
+            message = ZhaoCiMessageType.toZhaociJson("1", "fail", "data","");
+        }
+
         return message;
     }
 
@@ -178,9 +196,14 @@ public class TaleController extends BaseController {
     @ResponseBody
     public String insertComment(HttpServletRequest request, HttpServletResponse response, @ModelAttribute Comment comment) {
         String message = null;
+        try {
         commentService.add(comment);
         Tale tale = taleService.queryById(comment.getTaleId());
         message = ZhaoCiMessageType.toZhaociJson("0", "success", "data", tale);
+        }catch (Exception e){
+            e.printStackTrace();
+            message = ZhaoCiMessageType.toZhaociJson("1", "fail", "data","");
+        }
         return message;
     }
 
@@ -196,10 +219,15 @@ public class TaleController extends BaseController {
     @ResponseBody
     public String commentList(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer id) {
         String message = null;
+        try{
         Comment comment = new Comment();
         comment.setTaleId(id);
         List<Comment> list = commentService.selectList(comment);
         message = ZhaoCiMessageType.toZhaociJson("0", "success", "data", list);
+        }catch (Exception e){
+            e.printStackTrace();
+            message = ZhaoCiMessageType.toZhaociJson("1", "fail", "data","");
+        }
         return message;
     }
 
@@ -215,8 +243,13 @@ public class TaleController extends BaseController {
     public String queryTale(HttpServletRequest request, HttpServletResponse response) {
         String message = null;
         String id = request.getParameter("id");
+        try{
         Map<String,Object> map= taleService.queryById2(Integer.parseInt(id));
         message = ZhaoCiMessageType.toZhaociJson("0", "success", "data", map);
+        }catch (Exception e){
+            e.printStackTrace();
+            message = ZhaoCiMessageType.toZhaociJson("1", "fail", "data","");
+        }
         return message;
     }
 
@@ -230,11 +263,62 @@ public class TaleController extends BaseController {
     @ResponseBody
     public String todatRecommend(HttpServletRequest request, HttpServletResponse response) {
         String message = null;
-        List<Map<String,Object>> mapList = new ArrayList<>();
-        List<Tale> list= taleService.todatRecommend(DateUtil.getCurrDate(DateUtil.DATE_FORMAT));
-        message = ZhaoCiMessageType.toZhaociJson("0", "success", "data", list);
+        try {
+            List<Map<String, Object>> mapList = new ArrayList<>();
+            List<Tale> list = taleService.todatRecommend(DateUtil.getCurrDate(DateUtil.DATE_FORMAT));
+            message = ZhaoCiMessageType.toZhaociJson("0", "success", "data", list);
+        }catch (Exception e){
+            e.printStackTrace();
+            message = ZhaoCiMessageType.toZhaociJson("1", "fail", "data","");
+        }
         return message;
     }
 
+    /**
+     * 生成邀请码
+     * @param request
+     * @param response
+     * @return
+     */
+    @RequestMapping(value = "createInviteCode", produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String createInviteCode(HttpServletRequest request, HttpServletResponse response) {
+        String message = null;
+        String customerId = request.getParameter("customerId");
+        try{
+        InviteCode inviteCode = new InviteCode();
+        inviteCode.setIsUsed(Constants.TRUE);
+        inviteCode.setCreateUser(customerId);
+        inviteCode.setInviteCode(this.getStringRandom(8));
+        inviteCode.setCreateDate(DateUtil.getCurrDate(DateUtil.DATE_FORMAT));
+        inviteCodeService.add(inviteCode);
+        message = ZhaoCiMessageType.toZhaociJson("0", "success", "data", inviteCode);
+        }catch (Exception e){
+            e.printStackTrace();
+            message = ZhaoCiMessageType.operateToJson("1","数据异常！");
+        }
+        return message;
+    }
 
+    //生成随机数字和字母,
+    private String getStringRandom(int length) {
+
+        String val = "";
+        Random random = new Random();
+
+        //参数length，表示生成几位随机数
+        for(int i = 0; i < length; i++) {
+
+            String charOrNum = random.nextInt(2) % 2 == 0 ? "char" : "num";
+            //输出字母还是数字
+            if( "char".equalsIgnoreCase(charOrNum) ) {
+                //输出是大写字母还是小写字母
+                int temp = random.nextInt(2) % 2 == 0 ? 65 : 97;
+                val += (char)(random.nextInt(26) + temp);
+            } else if( "num".equalsIgnoreCase(charOrNum) ) {
+                val += String.valueOf(random.nextInt(10));
+            }
+        }
+        return val;
+    }
 }

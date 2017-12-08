@@ -40,4 +40,8 @@
 		<property name="mapperInterface" value="com.zhaoci.share.user.dao.SysUsersRolesDao"/>
 		<property name="sqlSessionFactory" ref="sqlSessionFactory"/>
 	</bean>
+	<bean id="inviteCodeDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.zhaoci.share.user.dao.InviteCodeDao"/>
+		<property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+	</bean>
 </beans>

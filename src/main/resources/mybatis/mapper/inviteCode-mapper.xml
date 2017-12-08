@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhaoci.share.user.dao.InviteCodeDao">
+	
+	<!-- 列结果resultMap boxiang 2016-01-03 -->
+	<resultMap id="resultMap" type="com.zhaoci.share.user.po.InviteCode">
+        <result column="id" property="id"/>
+        <result column="Invite_code" property="inviteCode"/>
+        <result column="is_used" property="isUsed"/>
+        <result column="create_date" property="createDate"/>
+		<result column="create_user" property="createUser"/>
+		<result column="use_user" property="useUser"/>
+	</resultMap>
+
+	<!-- 公共列 boxiang 2016-01-03 -->
+	<sql id="columns">
+		id, Invite_code, is_used, create_date,create_user,use_user
+	</sql>
+
+	<!-- 公共条件 boxiang 2016-01-03 -->
+	<sql id="whereSQL">
+		<if test="id != null and id != '' ">
+		AND id = #{id}
+		</if>
+		<if test="inviteCode != null and inviteCode != '' ">
+		AND Invite_code = #{inviteCode}
+		</if>
+		<if test="isUsed != null and isUsed != '' ">
+		AND is_used = #{isUsed}
+		</if>
+		<if test="createDate != null and createDate != '' ">
+		AND create_date = #{createDate}
+		</if>
+		<if test="createUser != null and createUser != '' ">
+			AND create_user = #{createUser}
+		</if>
+		<if test="useUser != null and useUser != '' ">
+			AND use_user = #{useUser}
+		</if>
+	</sql>
+
+	<!-- 公共分页条件SQL boxiang 2016-01-03 -->
+	<sql id="wherePageSql">
+		<if test="params.id != null and params.id != '' ">
+		AND id = #{params.id}
+		</if>
+		<if test="params.inviteCode != null and params.inviteCode != '' ">
+		AND Invite_code = #{params.inviteCode}
+		</if>
+		<if test="params.isUsed != null and params.isUsed != '' ">
+		AND is_used = #{params.isUsed}
+		</if>
+		<if test="params.createDate != null and params.createDate != '' ">
+		AND create_date = #{params.createDate}
+		</if>
+		<if test="params.createUser != null and params.createUser != '' ">
+			AND create_user = #{params.createUser}
+		</if>
+		<if test="params.useUser != null and params.useUser != '' ">
+			AND create_date = #{params.useUser}
+		</if>
+	</sql>
+
+	<!-- 根据主键ID查询 boxiang 2016-01-03 -->
+	<select id="queryById" resultMap="resultMap">
+		SELECT <include refid="columns" />
+		  FROM T_INVITE_CODE 
+	     WHERE id = #{id}     
+	</select>
+
+	<!-- 查询列表 boxiang 2016-01-03 -->
+	<select id="selectList" resultMap="resultMap">
+		SELECT <include refid="columns" />
+		  FROM T_INVITE_CODE
+		 WHERE 1 = 1	
+		 <include refid="whereSQL" />
+	</select>
+
+	<!-- 查询分页列表 boxiang 2016-01-03 -->
+	<select id="queryListPage" resultMap="resultMap">
+		SELECT <include refid="columns" />
+		  FROM T_INVITE_CODE
+		 WHERE 1 = 1
+		 <include refid="wherePageSql" />
+	</select>
+
+	<!-- 插入 boxiang 2016-01-03 -->
+	<insert id="insert" parameterType="com.zhaoci.share.user.po.InviteCode">
+        INSERT INTO T_INVITE_CODE (
+        	id,
+        	Invite_code,
+        	is_used,
+        	create_date,
+        	create_user,
+        	use_user
+        ) VALUES (
+        	#{id},
+        	#{inviteCode},
+        	#{isUsed},
+        	#{createDate},
+        	#{createUser},
+        	#{useUser}
+        )
+	</insert>
+
+	<!-- 根据主键ID删除 boxiang 2016-01-03 -->
+	<delete id="delete">
+		DELETE FROM T_INVITE_CODE 
+		 WHERE id = #{id} 
+	</delete>
+
+	<!-- 更新 boxiang 2016-01-03 -->
+	<update id="update" parameterType="com.zhaoci.share.user.po.InviteCode">
+        UPDATE T_INVITE_CODE 
+		SET
+	        Invite_code = #{inviteCode},
+	        is_used = #{isUsed},
+	        create_date = #{createDate},
+	          create_user = #{createUser},
+	            use_user = #{useUser}
+        WHERE id = #{id} 	        
+	</update>
+
+	<update id="batchUpdate">
+		<foreach collection="list" item="item" open="" close="" separator=";">
+			UPDATE T_INVITE_CODE
+			<set>
+    	        Invite_code = #{item.inviteCode},
+    	        is_used = #{item.isUsed},
+    	        create_date = #{item.createDate}
+			</set>
+            WHERE id = #{item.id} 	
+		</foreach>
+	</update>
+</mapper>

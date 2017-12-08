@@ -19,11 +19,20 @@ public class Customer implements Serializable {
 
 	/**  */
 	private String email;
+	private String password;
 	private  Integer sex;
 	private  Integer age;
 	private String synopsis;
 	private String createDate;
 	private String updateDate;
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
 	public String getCreateDate() {
 		return createDate;
