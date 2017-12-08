@@ -17,7 +17,7 @@ public interface TaleService {
 
 	Tale queryById(Integer id);
 	Map<String,Object> queryById2(Integer id);
-	
+	List<Tale> todatRecommend(String date);
 	void add(Tale tale);
 
 	void delete(Integer id);

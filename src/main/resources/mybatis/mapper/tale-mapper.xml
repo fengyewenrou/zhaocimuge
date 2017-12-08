@@ -197,7 +197,16 @@
         <include refid="wherePageSql"/>
         order by collectionCount desc, likeCount desc,commentCount desc
     </select>
-
+    <select id="todatRecommend" resultMap="resultMap">
+        SELECT t.id,
+        t.title,
+        (SELECT COUNT(id) from t_customer_collection where t_customer_collection.tale_id = t.id and
+        t_customer_collection.type = '2' and t_customer_collection.create_date = #{_parameter} ) likeCount
+        FROM TALE t
+        WHERE 1 = 1
+        order by likeCount desc
+        limit 5
+    </select>
     <!-- 插入 zhaoci 2016-01-03 -->
     <insert id="insert" parameterType="com.zhaoci.share.story.tale.po.Tale">
         INSERT INTO TALE (

@@ -13,6 +13,7 @@ import com.zhaoci.share.story.service.CommentService;
 import com.zhaoci.share.story.service.StoryTypeService;
 import com.zhaoci.share.story.tale.po.Tale;
 import com.zhaoci.share.story.tale.service.TaleService;
+import com.zhaoci.share.utils.DateUtil;
 import com.zhaoci.share.utils.ZhaoCiMessageType;
 import org.apache.commons.codec.binary.StringUtils;
 import org.apache.log4j.Logger;
@@ -26,9 +27,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * Created by zhaoge on 2017/11/26.
@@ -76,6 +75,13 @@ public class TaleController extends BaseController {
         }
         return message;
     }
+
+    /**
+     * 我喜欢的列表  type 应为2 收藏为1
+     * @param request
+     * @param response
+     * @return
+     */
     @RequestMapping(value = "taleListLike", produces = "application/json;charset=utf-8")
     @ResponseBody
     public String taleListLike(HttpServletRequest request, HttpServletResponse response) {
@@ -211,6 +217,22 @@ public class TaleController extends BaseController {
         String id = request.getParameter("id");
         Map<String,Object> map= taleService.queryById2(Integer.parseInt(id));
         message = ZhaoCiMessageType.toZhaociJson("0", "success", "data", map);
+        return message;
+    }
+
+    /**
+     * 今日推荐  只展示5条标题和名字
+     * @param request
+     * @param response
+     * @return
+     */
+    @RequestMapping(value = "todatRecommend", produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String todatRecommend(HttpServletRequest request, HttpServletResponse response) {
+        String message = null;
+        List<Map<String,Object>> mapList = new ArrayList<>();
+        List<Tale> list= taleService.todatRecommend(DateUtil.getCurrDate(DateUtil.DATE_FORMAT));
+        message = ZhaoCiMessageType.toZhaociJson("0", "success", "data", list);
         return message;
     }
 

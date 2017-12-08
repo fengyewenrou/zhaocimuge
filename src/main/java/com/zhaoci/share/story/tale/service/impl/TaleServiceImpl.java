@@ -61,6 +61,11 @@ public class TaleServiceImpl implements TaleService {
 	}
 
 	@Override
+	public   List<Tale> todatRecommend(String date) {
+		return taleDao.todatRecommend(date);
+	}
+
+	@Override
 	@Transactional(propagation=Propagation.REQUIRED,rollbackFor={RuntimeException.class, Exception.class})
 	public void add(Tale tale) {
 		taleDao.insert(tale);

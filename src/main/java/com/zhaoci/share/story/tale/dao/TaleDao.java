@@ -15,4 +15,5 @@ public interface TaleDao extends IMybatisBaseDao<Tale> {
     void batchUpdate(List<Tale> taleList);
     List<Tale> queryListPage2(Page<Tale> page);
     Map<String,Object> queryById2(Integer id);
+    List<Tale> todatRecommend(String date);
 }
