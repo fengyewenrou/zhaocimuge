@@ -22,9 +22,18 @@ public class Customer implements Serializable {
 	private String password;
 	private  Integer sex;
 	private  Integer age;
+	private String image;
 	private String synopsis;
 	private String createDate;
 	private String updateDate;
+
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
 
 	public String getPassword() {
 		return password;

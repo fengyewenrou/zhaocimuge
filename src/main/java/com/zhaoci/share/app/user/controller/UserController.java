@@ -9,12 +9,14 @@ import com.zhaoci.share.utils.MD5Util;
 import com.zhaoci.share.utils.ZhaoCiMessageType;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.util.List;
 
 /**
@@ -121,6 +123,13 @@ public class UserController {
         }
         return message;
     }
+
+    /**
+     * 修改密码
+     * @param request
+     * @param response
+     * @return
+     */
     @RequestMapping(value = "updateCustomerPassword",produces = "application/json;charset=utf-8")
     @ResponseBody
     public String updateCustomer(HttpServletRequest request,HttpServletResponse response){
@@ -142,6 +151,40 @@ public class UserController {
         }else {
             message = ZhaoCiMessageType.toZhaociJson("1", "无效的账号", "data", "");
         }
+        }catch (Exception e){
+            message = ZhaoCiMessageType.operateToJson("2", "数据异常:"+e);
+        }
+
+        return message;
+    }
+
+    /**
+     * 修改头像
+     * @param request
+     * @param response
+     * @return
+     */
+    @RequestMapping(value = "updateCustomerImage",produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String updateCustomerImage(HttpServletRequest request,HttpServletResponse response){
+        String version= request.getParameter("version");
+        String account= request.getParameter("account");
+        String password= request.getParameter("password");
+        String imagePath= request.getParameter("imagePath");
+        String message=null;
+        try {
+            Customer customer = new Customer();
+            customer.setEmail(account);
+            customer.setPassword(MD5Util.md5(password));
+            List<Customer> list =customerService.selectList(customer);
+            if(list!=null&&list.size()>0){
+                customer = list.get(0);
+                //customer.setImage(imagePath);
+                customerService.update(customer);
+                message = ZhaoCiMessageType.toZhaociJson("0", "修改成功", "data", customer);
+            }else {
+                message = ZhaoCiMessageType.toZhaociJson("1", "无效的账号", "data", "");
+            }
         }catch (Exception e){
             message = ZhaoCiMessageType.operateToJson("2", "数据异常:"+e);
         }

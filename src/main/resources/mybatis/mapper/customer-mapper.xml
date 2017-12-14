@@ -14,6 +14,7 @@
 		<result column="password" property="password"/>
         <result column="sex" property="sex"/>
         <result column="age" property="age"/>
+		<result column="image" property="image"/>
         <result column="synopsis" property="synopsis"/>
 		<result column="create_date" property="createDate"/>
 		<result column="update_date" property="updateDate"/>
@@ -21,7 +22,7 @@
 
 	<!-- 公共列  2016-01-03 -->
 	<sql id="columns">
-		id, name, phone, address, email,password,sex,age,create_date,update_date
+		id, name, phone, address, email,password,sex,age,image,create_date,update_date
 	</sql>
 
 	<!-- 公共条件  2016-01-03 -->
@@ -121,6 +122,7 @@
         	password,
         	sex,
         	age,
+        	image,
         	synopsis,
         	create_date,
         	update_date
@@ -133,6 +135,7 @@
         	#{password},
         	#{sex},
         	#{age},
+        	#{image},
         	#{synopsis},
         	#{createDate},
         	#{updateDate}
@@ -156,6 +159,7 @@
 	        password = #{password},
 	        sex = #{sex},
 	        age = #{age},
+	        image = #{image},
 	        synopsis = #{synopsis},
 			create_date = #{createDate}
 			update_date = #{updateDate}
