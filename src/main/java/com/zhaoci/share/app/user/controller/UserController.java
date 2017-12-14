@@ -39,6 +39,13 @@ public class UserController {
 
 
    /* @RequestMapping("register")*/
+
+    /**
+     * 注册
+     * @param request
+     * @param response
+     * @return
+     */
     @RequestMapping(value = "register",produces = "application/json;charset=utf-8")
     @ResponseBody
     public String register(HttpServletRequest request,HttpServletResponse response){
@@ -82,6 +89,13 @@ public class UserController {
 
       return message;
     }
+
+    /**
+     * 登录
+     * @param request
+     * @param response
+     * @return
+     */
     @RequestMapping(value = "login",produces = "application/json;charset=utf-8")
     @ResponseBody
     public String login(HttpServletRequest request,HttpServletResponse response){
@@ -105,6 +119,33 @@ public class UserController {
             logger.info("数据异常："+e.getMessage());
             message = ZhaoCiMessageType.operateToJson("2", "数据异常！");
         }
+        return message;
+    }
+    @RequestMapping(value = "updateCustomerPassword",produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String updateCustomer(HttpServletRequest request,HttpServletResponse response){
+        String version= request.getParameter("version");
+        String account= request.getParameter("account");
+        String password= request.getParameter("password");
+        String newPassword = request.getParameter("newPassword");
+        String message=null;
+        try {
+        Customer customer = new Customer();
+        customer.setEmail(account);
+        customer.setPassword(MD5Util.md5(password));
+        List<Customer> list =customerService.selectList(customer);
+        if(list!=null&&list.size()>0){
+            customer = list.get(0);
+            customer.setPassword(MD5Util.md5(newPassword));
+            customerService.update(customer);
+            message = ZhaoCiMessageType.toZhaociJson("0", "修改成功", "data", customer);
+        }else {
+            message = ZhaoCiMessageType.toZhaociJson("1", "无效的账号", "data", "");
+        }
+        }catch (Exception e){
+            message = ZhaoCiMessageType.operateToJson("2", "数据异常:"+e);
+        }
+
         return message;
     }
 }
